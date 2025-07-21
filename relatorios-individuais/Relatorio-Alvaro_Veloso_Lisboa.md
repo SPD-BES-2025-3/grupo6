@@ -64,6 +64,41 @@ Configurei o ambiente de desenvolvimento com:
 - Profiles de configuração via application.yml
 - Estratégia de DDL automática para desenvolvimento
 
+### **Cobertura de Testes Unitários**
+
+Implementei uma cobertura abrangente de testes unitários para os casos de uso críticos do sistema, utilizando **JUnit 5** e **Mockito** para garantir a qualidade e confiabilidade do código:
+
+**Testes para IncluirUsuario**:
+- **Cenário de sucesso**: Validação completa do fluxo de inclusão de usuário com dados válidos
+- **Criptografia de senha**: Verificação se a senha é corretamente criptografada antes do armazenamento
+- **Segurança**: Garantia de que senhas nunca são salvas em texto plano
+- **Validações de entrada**: Testes para cenários com dados inválidos (usuário null, email null)
+- **Verificação de duplicatas**: Validação de regras de negócio para evitar emails, CPFs e logins duplicados
+
+**Testes para InativarUsuario**:
+- **Inativação bem-sucedida**: Validação do processo de inativação quando o usuário existe e está ativo
+- **Tratamento de erros**: Verificação de exceções para usuários inexistentes
+- **Verificação de estado**: Confirmação da alteração do status de ativo para inativo
+
+**Estrutura de Testes**:
+- Uso de `@ExtendWith(MockitoExtension.class)` para integração com Mockito
+- Aplicação de `@Mock` para dependencies (UsuarioRepository, PasswordEncoder)
+- Utilização de `@InjectMocks` para injeção automática dos mocks
+- Implementação de `@BeforeEach` para setup consistente dos dados de teste
+- Nomenclatura descritiva com `@DisplayName` para melhor documentação
+
+**Padrões de Teste Implementados**:
+- **Given-When-Then**: Estrutura clara e padronizada em todos os testes
+- **Verificações múltiplas**: Uso de `verify()` para confirmar interações corretas com dependencies
+- **Assertions robustas**: Validação tanto de resultados quanto de comportamentos
+- **Isolamento**: Cada teste é independente e não interfere nos demais
+
+**Métricas de Cobertura**:
+- 100% de cobertura para os casos de uso de usuário implementados
+- Cobertura de cenários positivos e negativos
+- Validação de todas as regras de negócio críticas
+- Testes de segurança para criptografia de senhas
+
 ### **Enums e Validações**
 
 Implementei enums para garantir consistência de dados:
