@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class IncluirLivro implements UseCase<Livro, Livro> {
+public class AlterarLivro implements UseCase<Livro, Livro> {
 
     private final LivroRepository livroRepository;
 
@@ -23,10 +23,9 @@ public class IncluirLivro implements UseCase<Livro, Livro> {
     public void validar(Livro livro) {
         LivroValidator.validar(livro);
 
-        // Verifica se já existe um livro com mesmo nome e autor
-        if (livroRepository.existsByNomeAndAutor(livro.getNome(), livro.getAutor())) {
+        if (livroRepository.existsAnotherByNomeAndAutor(livro.getId(), livro.getNome(), livro.getAutor())) {
             throw new NegocioException("Já existe um livro cadastrado com o nome: " +
-                                      livro.getNome() + " e autor: " + livro.getAutor());
+                                       livro.getNome() + " e autor: " + livro.getAutor());
         }
     }
 }
