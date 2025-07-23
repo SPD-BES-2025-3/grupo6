@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 @RequiredArgsConstructor
 public class IncluirUsuario implements UseCase<Usuario, Usuario> {
@@ -21,6 +23,7 @@ public class IncluirUsuario implements UseCase<Usuario, Usuario> {
         validar(usuario);
         // Criptografar a senha antes de salvar
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+        usuario.setDataCadastro(LocalDateTime.now());
         return usuarioRepository.save(usuario);
     }
 
