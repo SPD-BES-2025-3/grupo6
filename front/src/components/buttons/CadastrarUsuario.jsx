@@ -8,6 +8,8 @@ import Icon from "@/helpers/iconHelper";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import useAlert from "@/context/alert";
+import { cadastraUsuario } from "@/services/usuarios";
 
 const CloseButton = React.memo(function CloseButton({ onClose }) {
     return (
@@ -23,17 +25,43 @@ const schema = yup.object().shape({
     cpf: yup.string().required("Campo obrigatório"),
     login: yup.string().required("Campo obrigatórioo"),
     senha: yup.string().required("Campo obrigatório"),
-    perfil: yup.mixed().required("Campo obrigatório"),
+    permissoes: yup.mixed().required("Campo obrigatório"),
 });
 
 const CadastrarUsuario = () => {
+    const { createModalAsync, createModal, AlertComponent } = useAlert();
+
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = React.useCallback(() => setOpen(true), []);
     const handleClose = React.useCallback(() => setOpen(false), []);
 
-    const handleSubmit = (data) => {
-        console.log(data);
+    const handleSubmit = async (data) => {
+        const payload = { nome: data.nome, email: data.email, cpf: data.cpf, login: data.login, senha: data.senha, permissoes: [data.permissoes] };
+
+        const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo cadastrar este usuário?" });
+        if (!!isConfirmed) {
+            try {
+                const response = await cadastraUsuario(payload);
+                if (response.status === 200) {
+                    createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Usuário cadastrado com sucesso!</p> });
+                    setOpen(false);
+                } else {
+                    createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao cadastrar o usuário</p> });
+                }
+            } catch (erro) {
+                createModal("error", {
+                    showConfirmButton: true,
+                    title: "Erro",
+                    html: (
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                            <p style={{ textAlign: "center" }}>Ocorreu um erro ao cadastrar o usuário</p>
+                            <p style={{ textAlign: "center" }}>{erro?.response?.data?.mensagem}</p>
+                        </div>
+                    ),
+                });
+            }
+        }
     };
 
     return (
@@ -42,7 +70,7 @@ const CadastrarUsuario = () => {
                 Cadastrar Usuário
             </Button>
 
-            <Dialog fullWidth maxWidth="lg" open={open} onClose={handleClose}>
+            <Dialog fullWidth maxWidth="sm" open={open} onClose={handleClose}>
                 {open && (
                     <FormContainer onSuccess={(FormData) => handleSubmit(FormData)} resolver={yupResolver(schema)}>
                         <DialogTitle>
@@ -63,6 +91,7 @@ const CadastrarUsuario = () => {
                     </FormContainer>
                 )}
             </Dialog>
+            {AlertComponent}
         </>
     );
 };

@@ -1,25 +1,23 @@
 import Icon from "@/helpers/iconHelper";
 import { Grid } from "@mui/material";
-import { id } from "date-fns/locale";
-import { PasswordElement, SelectElement, TextareaAutosizeElement, TextFieldElement } from "react-hook-form-mui";
-import { DatePickerElement } from "react-hook-form-mui/date-pickers";
+import { PasswordElement, SelectElement, TextFieldElement } from "react-hook-form-mui";
 
 const FormCadastrarUsuario = ({}) => {
     return (
         <Grid container spacing={2} pt={2}>
-            <Grid size={{ xs: 3 }}>
+            <Grid size={{ xs: 4 }}>
                 <TextFieldElement fullWidth name="nome" label="Nome" />
             </Grid>
-            <Grid size={{ xs: 3 }}>
+            <Grid size={{ xs: 4 }}>
                 <TextFieldElement fullWidth name="cpf" label="CPF" />
             </Grid>
-            <Grid size={{ xs: 3 }}>
+            <Grid size={{ xs: 4 }}>
                 <TextFieldElement fullWidth name="email" label="E-mail" />
             </Grid>
-            <Grid size={{ xs: 3 }}>
+            <Grid size={{ xs: 12 }}>
                 <SelectElement
                     fullWidth
-                    name="perfil"
+                    name="permissoes"
                     label="Perfil"
                     options={[
                         { id: "ADMINISTRADOR", label: "Administrador" },
