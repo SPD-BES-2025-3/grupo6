@@ -1,9 +1,10 @@
 import Icon from "@/helpers/iconHelper";
-import { Box, Grid, Paper, Typography, useTheme } from "@mui/material";
+import { Box, Button, Grid, Paper, Stack, Typography, useTheme } from "@mui/material";
 import PageTitle from "@/components/PageTitle";
 import ResourceAvatar from "@/components/Avatar";
 import { UserAuth } from "@/context/auth";
 import { LogoutButton } from "@/components/buttons/LogoutButton";
+import CadastrarUsuario from "@/components/buttons/CadastrarUsuario";
 
 const IndexHome = () => {
     const theme = useTheme();
@@ -12,6 +13,7 @@ const IndexHome = () => {
 
     const permissao = {
         ADMINISTRADOR: perfil === "ADMINISTRADOR",
+        USUARIO: perfil === "USUARIO",
         VISITANTE: perfil === "VISITANTE",
     };
 
@@ -20,8 +22,8 @@ const IndexHome = () => {
             <PageTitle title="Sistema biblioteca - Início" />
             {dadosUser && (
                 <>
-                    <Grid container spacing={4} maxWidth={1280} margin="0 auto">
-                        <Grid size={{ xs: 12, lg: 12 }}>
+                    <Grid container spacing={4}>
+                        <Grid size={{ xs: 12, lg: !!permissao.ADMINISTRADOR || !!permissao.USUARIO ? 9 : 12 }}>
                             <Paper sx={{ p: 4, height: "100%" }}>
                                 <ResourceAvatar sx={{ mt: -5, ml: -5 }} recurso={"Home"} color={theme.colors.gradients.blue2} />
                                 <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" height="100%" mb={12}>
@@ -30,7 +32,7 @@ const IndexHome = () => {
                                         Bem-vindo, <span style={{ textTransform: "capitalize" }}>{dadosUser.nome_usuario}</span>!
                                     </Typography>
                                     <Typography mt={3} variant="h4" fontWeight="normal">
-                                        Você está acessando o sistema como <b>{!!permissao.ADMINISTRADOR ? "administrador" : "convidado"}</b>.
+                                        Você está acessando o sistema como <b>{!!permissao.ADMINISTRADOR ? "administrador" : !!permissao.USUARIO ? "usuário" : "visitante"}</b>.
                                     </Typography>
                                     <Box mt={5} display="flex" flexDirection="column" alignItems="center">
                                         <Typography variant="h4" fontWeight="normal" mb={1}>
@@ -43,12 +45,48 @@ const IndexHome = () => {
                         </Grid>
                         {permissao.ADMINISTRADOR && (
                             <>
-                                <Grid size={{ sm: 12 }}>{/* <TemplateLivros /> */}administrador</Grid>
+                                <Grid size={{ xs: 12, lg: 3 }}>
+                                    <Paper sx={{ p: 4, height: "100%" }}>
+                                        <ResourceAvatar sx={{ mt: -5, ml: -5 }} recurso={"User"} />
+
+                                        <Typography variant="h5" mb={3}>
+                                            Ações de Administrador
+                                        </Typography>
+                                        <Stack spacing={4}>
+                                            <CadastrarUsuario />
+                                            <Button
+                                                variant="contained"
+                                                fullWidth
+                                                color="secondary"
+                                                onClick={() => {
+                                                    /* navegar para cadastro de livro */
+                                                }}
+                                            >
+                                                Cadastrar Livro
+                                            </Button>
+                                            <Button
+                                                variant="contained"
+                                                fullWidth
+                                                color="success"
+                                                onClick={() => {
+                                                    /* navegar para reserva */
+                                                }}
+                                            >
+                                                Fazer Reserva
+                                            </Button>
+                                        </Stack>
+                                    </Paper>
+                                </Grid>
+                            </>
+                        )}
+                        {permissao.USUARIO && (
+                            <>
+                                <Grid size={{ xs: 12, lg: 3 }}>{/* <TemplateLivros /> */}usuário</Grid>
                             </>
                         )}
                         {permissao.VISITANTE && (
-                             <>
-                                <Grid size={{ sm: 12 }}>{/* <TemplateLivros /> */}convidado</Grid>
+                            <>
+                                <Grid size={{ xs: 12 }}>{/* <TemplateLivros /> */}visitante</Grid>
                             </>
                         )}
                     </Grid>

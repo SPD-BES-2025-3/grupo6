@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Typography } from "@mui/material";
+import { Grid, Typography, useTheme } from "@mui/material";
 import { FormContainer, PasswordElement, TextFieldElement } from "react-hook-form-mui";
 
 import Icon from "@/helpers/iconHelper";
@@ -10,7 +10,11 @@ import { UserAuth } from "@/context/auth";
 import useLocalStorage from "@/context/localstorage";
 import { loginRequest } from "@/services/auth";
 
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 const Login = () => {
+    const theme = useTheme();
     const { createModal, AlertComponent } = useAlert();
     const { setUser, setDadosUser } = UserAuth();
     const { setLocalStorage } = useLocalStorage();
@@ -35,6 +39,17 @@ const Login = () => {
         }
     };
 
+    const handleLoginVisitante = () => {
+        setLocalStorage("userData", JSON.stringify({ perfil: "VISITANTE", nome_usuario: "Visitante" }));
+        setDadosUser({ perfil: "VISITANTE", nome_usuario: "Visitante" });
+        setUser(true);
+    };
+
+    const schema = yup.object().shape({
+        LOGIN: yup.string().required("Login é obrigatório"),
+        SENHA: yup.string().required("Senha é obrigatória"),
+    });
+
     return (
         <>
             <div
@@ -50,7 +65,7 @@ const Login = () => {
                 }}
             >
                 <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
-                    <FormContainer onSuccess={(FormData) => handleSubmit(FormData)}>
+                    <FormContainer onSuccess={(FormData) => handleSubmit(FormData)} resolver={yupResolver(schema)}>
                         <div
                             style={{
                                 background: "rgb(57 57 57 / 10%)",
@@ -123,23 +138,19 @@ const Login = () => {
                                         <PasswordElement
                                             fullWidth
                                             name="SENHA"
-                                            label="Senha" // Adicione um label se necessário
+                                            label="Senha"
                                             renderIcon={(visable) => (visable ? <Icon name="NotVisible" /> : <Icon name="View" />)}
                                             sx={{
-                                                // Estilizando o texto de entrada
                                                 "& .MuiInputBase-input": {
                                                     color: "white",
                                                 },
-                                                // Estilizando o label
                                                 "& .MuiInputLabel-root": {
                                                     color: "white",
                                                 },
-                                                // Estilizando o placeholder
                                                 "& .MuiInputBase-input::placeholder": {
                                                     color: "white",
-                                                    opacity: 1, // Garante que a cor do placeholder seja aplicada
+                                                    opacity: 1,
                                                 },
-                                                // Estilizando as bordas do campo de entrada
                                                 "& .MuiOutlinedInput-root": {
                                                     "& fieldset": {
                                                         borderColor: "white",
@@ -151,18 +162,25 @@ const Login = () => {
                                                         borderColor: "white",
                                                     },
                                                 },
-                                                // Estilização para quando o input estiver com autofill
                                                 "& .MuiInputBase-input:-webkit-autofill": {
                                                     color: "white",
                                                 },
-                                                // Estilizando o ícone de visibilidade (se aplicável)
                                                 "& .MuiIconButton-root": {
                                                     color: "white",
                                                 },
                                             }}
                                         />
                                     </div>
-
+                                    <Grid sx={{ display: "flex", justifyContent: "center", pb: 2 }}>
+                                        <Typography
+                                            sx={{ fontSize: "13px", color: theme.palette.primary.main, cursor: "pointer" }}
+                                            onClick={() => {
+                                                handleLoginVisitante();
+                                            }}
+                                        >
+                                            Entrar como visitante.
+                                        </Typography>
+                                    </Grid>
                                     <div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.6 }} style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                                         <NextButton type="submit" text="Entrar" />
                                     </div>
