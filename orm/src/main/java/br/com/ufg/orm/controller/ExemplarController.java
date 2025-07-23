@@ -1,5 +1,7 @@
 package br.com.ufg.orm.controller;
 
+import br.com.ufg.orm.dto.AlterarExemplarRequestDto;
+import br.com.ufg.orm.dto.ExemplarResponseDto;
 import br.com.ufg.orm.dto.IncluirExemplarRequestDto;
 import br.com.ufg.orm.model.Exemplar;
 import br.com.ufg.orm.repository.ExemplarRepository;
@@ -34,26 +36,27 @@ public class ExemplarController {
     @Operation(summary = "Listar todos os exemplares", description = "Retorna uma lista com todos os exemplares cadastrados")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de exemplares retornada com sucesso",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Exemplar.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExemplarResponseDto.class))),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content)
     })
-    public ResponseEntity<Iterable<Exemplar>> getAllExemplares() {
-        return ResponseEntity.ok(exemplarRepository.findAll());
+    public ResponseEntity<Iterable<ExemplarResponseDto>> getAllExemplares() {
+        Iterable<Exemplar> exemplares = exemplarRepository.findAll();
+        return ResponseEntity.ok(ExemplarResponseDto.from(exemplares));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar exemplar por ID", description = "Retorna um exemplar específico baseado no ID fornecido")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Exemplar encontrado com sucesso",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Exemplar.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExemplarResponseDto.class))),
         @ApiResponse(responseCode = "404", description = "Exemplar não encontrado", content = @Content),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content)
     })
-    public ResponseEntity<Exemplar> getExemplarById(
+    public ResponseEntity<ExemplarResponseDto> getExemplarById(
             @Parameter(description = "ID do exemplar a ser buscado", required = true)
             @PathVariable Long id) {
         return exemplarRepository.findById(id)
-                .map(ResponseEntity::ok)
+                .map(exemplar -> ResponseEntity.ok(ExemplarResponseDto.from(exemplar)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -61,46 +64,48 @@ public class ExemplarController {
     @Operation(summary = "Listar exemplares por livro", description = "Retorna todos os exemplares de um livro específico")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de exemplares retornada com sucesso",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Exemplar.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExemplarResponseDto.class))),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content)
     })
-    public ResponseEntity<List<Exemplar>> getExemplaresByLivroId(
+    public ResponseEntity<List<ExemplarResponseDto>> getExemplaresByLivroId(
             @Parameter(description = "ID do livro para buscar exemplares", required = true)
             @PathVariable Long idLivro) {
         List<Exemplar> exemplares = exemplarRepository.findAllByLivroId(idLivro);
-        return ResponseEntity.ok(exemplares);
+        return ResponseEntity.ok(ExemplarResponseDto.from(exemplares));
     }
 
     @PostMapping
     @Operation(summary = "Criar novo exemplar", description = "Cria um novo exemplar no sistema")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Exemplar criado com sucesso",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Exemplar.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExemplarResponseDto.class))),
         @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", content = @Content),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content)
     })
-    public ResponseEntity<Exemplar> incluirExemplar(
+    public ResponseEntity<ExemplarResponseDto> incluirExemplar(
             @Parameter(description = "Dados do exemplar a ser criado", required = true)
             @RequestBody IncluirExemplarRequestDto requestDto) {
-        return ResponseEntity.ok(incluirExemplar.executar(requestDto.toExemplar()));
+        Exemplar exemplarSalvo = incluirExemplar.executar(requestDto.toExemplar());
+        return ResponseEntity.ok(ExemplarResponseDto.from(exemplarSalvo));
     }
 
     @PutMapping
     @Operation(summary = "Atualizar exemplar", description = "Atualiza os dados de um exemplar existente")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Exemplar atualizado com sucesso",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Exemplar.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExemplarResponseDto.class))),
         @ApiResponse(responseCode = "404", description = "Exemplar não encontrado", content = @Content),
         @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", content = @Content),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content)
     })
-    public ResponseEntity<Exemplar> atualizarExemplar(
+    public ResponseEntity<ExemplarResponseDto> atualizarExemplar(
             @Parameter(description = "Dados do exemplar a ser atualizado", required = true)
-            @RequestBody IncluirExemplarRequestDto requestDto) {
+            @RequestBody AlterarExemplarRequestDto requestDto) {
         if (!exemplarRepository.existsById(requestDto.id())) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(alterarExemplar.executar(requestDto.toExemplar()));
+        Exemplar exemplarAtualizado = alterarExemplar.executar(requestDto.toExemplar());
+        return ResponseEntity.ok(ExemplarResponseDto.from(exemplarAtualizado));
     }
 
     @DeleteMapping("/{id}")

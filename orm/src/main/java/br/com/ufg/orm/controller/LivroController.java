@@ -1,6 +1,7 @@
 package br.com.ufg.orm.controller;
 
 import br.com.ufg.orm.dto.IncluirLIvroRequestDto;
+import br.com.ufg.orm.dto.LivroResponseDto;
 import br.com.ufg.orm.model.Livro;
 import br.com.ufg.orm.repository.LivroRepository;
 import br.com.ufg.orm.useCase.livro.AlterarLivro;
@@ -32,26 +33,27 @@ public class LivroController {
     @Operation(summary = "Listar todos os livros", description = "Retorna uma lista com todos os livros cadastrados")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de livros retornada com sucesso",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Livro.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = LivroResponseDto.class))),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content)
     })
-    public ResponseEntity<Iterable<Livro>> getAllLivros() {
-        return ResponseEntity.ok(livroRepository.findAll());
+    public ResponseEntity<Iterable<LivroResponseDto>> getAllLivros() {
+        Iterable<Livro> livros = livroRepository.findAll();
+        return ResponseEntity.ok(LivroResponseDto.from(livros));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar livro por ID", description = "Retorna um livro específico baseado no ID fornecido")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Livro encontrado com sucesso",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Livro.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = LivroResponseDto.class))),
         @ApiResponse(responseCode = "404", description = "Livro não encontrado", content = @Content),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content)
     })
-    public ResponseEntity<Livro> getLivroById(
+    public ResponseEntity<LivroResponseDto> getLivroById(
             @Parameter(description = "ID do livro a ser buscado", required = true)
             @PathVariable Long id) {
         return livroRepository.findById(id)
-                .map(ResponseEntity::ok)
+                .map(livro -> ResponseEntity.ok(LivroResponseDto.from(livro)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -59,32 +61,34 @@ public class LivroController {
     @Operation(summary = "Criar novo livro", description = "Cria um novo livro no sistema")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Livro criado com sucesso",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Livro.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = LivroResponseDto.class))),
         @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", content = @Content),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content)
     })
-    public ResponseEntity<Livro> incluirLivro(
+    public ResponseEntity<LivroResponseDto> incluirLivro(
             @Parameter(description = "Dados do livro a ser criado", required = true)
             @RequestBody IncluirLIvroRequestDto requestDto){
-        return ResponseEntity.ok(incluirLivro.executar(requestDto.toLivro()));
+        Livro livroSalvo = incluirLivro.executar(requestDto.toLivro());
+        return ResponseEntity.ok(LivroResponseDto.from(livroSalvo));
     }
 
     @PutMapping
     @Operation(summary = "Atualizar livro", description = "Atualiza os dados de um livro existente")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Livro atualizado com sucesso",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Livro.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = LivroResponseDto.class))),
         @ApiResponse(responseCode = "404", description = "Livro não encontrado", content = @Content),
         @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", content = @Content),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content)
     })
-    public ResponseEntity<Livro> atualizarLivro(
+    public ResponseEntity<LivroResponseDto> atualizarLivro(
             @Parameter(description = "Dados do livro a ser atualizado", required = true)
             @RequestBody IncluirLIvroRequestDto requestDto) {
         if (!livroRepository.existsById(requestDto.id())) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(alterarLivro.executar(requestDto.toLivro()));
+        Livro livroAtualizado = alterarLivro.executar(requestDto.toLivro());
+        return ResponseEntity.ok(LivroResponseDto.from(livroAtualizado));
     }
 
     @DeleteMapping("/{id}")

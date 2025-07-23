@@ -9,6 +9,8 @@ import br.com.ufg.orm.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 @RequiredArgsConstructor
 public class IncluirExemplar implements UseCase<Exemplar, Exemplar>{
@@ -28,6 +30,7 @@ public class IncluirExemplar implements UseCase<Exemplar, Exemplar>{
 
         validar(exemplar);
 
+        exemplar.setDataCriacao(LocalDateTime.now());
         return exemplarRepository.save(exemplar);
     }
 
