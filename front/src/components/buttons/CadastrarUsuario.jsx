@@ -10,6 +10,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useAlert from "@/context/alert";
 import { cadastraUsuario } from "@/services/usuarios";
+import { useQueryClient } from "@tanstack/react-query";
 
 const CloseButton = React.memo(function CloseButton({ onClose }) {
     return (
@@ -30,6 +31,7 @@ const schema = yup.object().shape({
 
 const CadastrarUsuario = () => {
     const { createModalAsync, createModal, AlertComponent } = useAlert();
+    const queryClient = useQueryClient();
 
     const [open, setOpen] = React.useState(false);
 
@@ -46,6 +48,7 @@ const CadastrarUsuario = () => {
                 if (response.status === 200) {
                     createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Usuário cadastrado com sucesso!</p> });
                     setOpen(false);
+                    queryClient.invalidateQueries(["get-usuarios"]);
                 } else {
                     createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao cadastrar o usuário</p> });
                 }

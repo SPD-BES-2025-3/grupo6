@@ -5,7 +5,7 @@ import { formatDate, montaMascaraCPF_CNPJ } from "@/helpers/format";
 import { useQuery } from "@tanstack/react-query";
 import { getUsuarios } from "@/services/usuarios";
 
-const TabelaListaUsuarios = ({ permissao }) => {
+const TabelaListaUsuarios = ({ permissao, size = 12 }) => {
     const columnsUsuariosCadastrados = [
         {
             field: "id",
@@ -60,9 +60,9 @@ const TabelaListaUsuarios = ({ permissao }) => {
     });
 
     return (
-        <Grid size={{ xs: 12 }}>
+        <Grid size={{ xs: size }}>
             <Paper sx={{ p: 4, height: "100%" }}>
-                <ResourceAvatar sx={{ mt: -5, ml: -5 }} recurso={"User"} />
+                <ResourceAvatar sx={{ mt: -5, ml: -5 }} recurso={"Book"} />
 
                 <Typography variant="h5" mb={3}>
                     Lista de usuários

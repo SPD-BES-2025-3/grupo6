@@ -7,6 +7,7 @@ import { LogoutButton } from "@/components/buttons/LogoutButton";
 import CadastrarUsuario from "@/components/buttons/CadastrarUsuario";
 import CadastrarLivro from "@/components/buttons/CadastrarLivro";
 import TabelaListaUsuarios from "@/components/datatable/TabelaListaUsuarios";
+import TabelaListaLivros from "@/components/datatable/TabelaListaLivros";
 
 const IndexHome = () => {
     const theme = useTheme();
@@ -71,7 +72,8 @@ const IndexHome = () => {
                                     </Paper>
                                 </Grid>
 
-                                <TabelaListaUsuarios permissao={!!permissao.ADMINISTRADOR} />
+                                <TabelaListaUsuarios size={6} permissao={!!permissao.ADMINISTRADOR} />
+                                <TabelaListaLivros size={6} permissao={!!permissao.ADMINISTRADOR} />
                             </>
                         )}
                         {permissao.USUARIO && (

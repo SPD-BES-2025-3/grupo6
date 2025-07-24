@@ -51,8 +51,10 @@ import { FaStar } from "react-icons/fa";
 import { FaRegStar } from "react-icons/fa";
 import { MdOutlineZoomIn } from "react-icons/md";
 import { MdOutlineZoomOut } from "react-icons/md";
+import { FaBook } from "react-icons/fa";
 
 const iconMap = {
+    Book: FaBook,
     ZoomOut: MdOutlineZoomOut,
     ZoomIn: MdOutlineZoomIn,
     ViewGrid: HiOutlineViewGrid,
