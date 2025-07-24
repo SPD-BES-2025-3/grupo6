@@ -2,9 +2,11 @@ import { getLivros } from "@/services/livros";
 import { Grid } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { SelectElement, TextFieldElement } from "react-hook-form-mui";
+import { SelectElement, TextFieldElement, useFormContext } from "react-hook-form-mui";
 
-const FormCadastrarExemplar = ({}) => {
+const FormCadastrarExemplar = ({ data }) => {
+    const { reset, setValue } = useFormContext();
+
     const [livrosOptions, setLivrosOptions] = useState([]);
     const livrosData = useQuery({
         queryKey: ["get-livros"],
@@ -26,6 +28,19 @@ const FormCadastrarExemplar = ({}) => {
             setLivrosOptions(opts);
         }
     }, [livrosData.data]);
+
+    useEffect(() => {
+        if (data && livrosOptions.length > 0) {
+            setTimeout(() => {
+                setValue("disponibilidade", data.disponibilidade);
+                setValue("conservacao", data.conservacao);
+                setValue("numeroEdicao", data.numeroEdicao);
+                setValue("idLivro", data.livroId);
+                setValue("codigoIdentificacao", data.codigoIdentificacao);
+                setValue("id", data.id);
+            }, 100);
+        }
+    }, [data, livrosOptions, setValue]);
 
     return (
         <Grid container spacing={2} pt={2}>

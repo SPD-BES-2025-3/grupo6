@@ -21,10 +21,6 @@ export const AuthContextProvider = ({ children }) => {
         setDadosUser(dadosUsuario);
     }, []);
 
-    React.useEffect(() => {
-        console.log(user, dadosUser);
-    }, [user, dadosUser]);
-
     const value = React.useMemo(
         () => ({
             user,

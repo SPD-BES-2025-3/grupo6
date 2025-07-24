@@ -29,7 +29,6 @@ function montaMascaraCPF_CNPJ(valor) {
     }
 }
 function formatDate(date) {
-    console.log(date);
     if (!!date) {
         const dateObject = new Date(date);
 
@@ -38,7 +37,6 @@ function formatDate(date) {
         const year = String(dateObject.getFullYear());
 
         const formattedDate = `${day}/${month}/${year}`;
-        console.log(formattedDate);
         return formattedDate;
     } else {
         return "";

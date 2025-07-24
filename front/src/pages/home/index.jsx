@@ -85,7 +85,7 @@ const IndexHome = () => {
                                 <Grid size={{ xs: 12, lg: 3 }}>{/* <TemplateLivros /> */}usuário</Grid>
                             </>
                         )}
-                        {permissao.VISITANTE && <TabelaListaExemplares permissao={!!permissao.VISITANTE} />}
+                        {permissao.VISITANTE && <TabelaListaExemplares />}
                     </Grid>
                 </>
             )}

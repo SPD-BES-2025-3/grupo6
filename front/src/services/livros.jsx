@@ -48,4 +48,16 @@ const updateExemplar = async (dados) => {
     return data;
 };
 
-export { getLivros, cadastraLivro, deletarLivro, updateLivro, getExemplares, cadastraExemplar, deletarExemplar, updateExemplar };
+const getExemplar = async (id) => {
+    const api = ApiClient();
+    const { data } = await api.get(`/exemplar/${id}`);
+    return data;
+};
+
+const getLivro = async (id) => {
+    const api = ApiClient();
+    const { data } = await api.get(`/livro/${id}`);
+    return data;
+};
+
+export { getLivros, cadastraLivro, deletarLivro, updateLivro, getExemplares, cadastraExemplar, deletarExemplar, updateExemplar, getExemplar, getLivro };

@@ -47,7 +47,6 @@ export const Table = ({ dataTable, columns, id, key }) => {
 };
 
 const TableQuery = ({ dataTable, columns, id }) => {
-    console.log(dataTable);
     return (
         <Grid container>
             {dataTable.length === 0 ? (
