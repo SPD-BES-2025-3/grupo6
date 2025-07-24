@@ -24,7 +24,7 @@ const updateLivro = async (dados) => {
     return data;
 };
 
-const getExemplar = async () => {
+const getExemplares = async () => {
     const api = ApiClient();
     const { data } = await api.get(`/exemplar`);
     return data;
@@ -48,4 +48,4 @@ const updateExemplar = async (dados) => {
     return data;
 };
 
-export { getLivros, cadastraLivro, deletarLivro, updateLivro, getExemplar, cadastraExemplar, deletarExemplar, updateExemplar };
+export { getLivros, cadastraLivro, deletarLivro, updateLivro, getExemplares, cadastraExemplar, deletarExemplar, updateExemplar };

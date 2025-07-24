@@ -9,6 +9,7 @@ import CadastrarLivro from "@/components/buttons/CadastrarLivro";
 import TabelaListaUsuarios from "@/components/datatable/TabelaListaUsuarios";
 import TabelaListaLivros from "@/components/datatable/TabelaListaLivros";
 import CadastrarExemplar from "@/components/buttons/CadastrarExemplar";
+import TabelaListaExemplares from "@/components/datatable/TabelaListaExemplares";
 
 const IndexHome = () => {
     const theme = useTheme();
@@ -74,8 +75,9 @@ const IndexHome = () => {
                                     </Paper>
                                 </Grid>
 
-                                <TabelaListaUsuarios size={6} permissao={!!permissao.ADMINISTRADOR} />
                                 <TabelaListaLivros size={6} permissao={!!permissao.ADMINISTRADOR} />
+                                <TabelaListaExemplares size={6} permissao={!!permissao.ADMINISTRADOR} />
+                                <TabelaListaUsuarios size={12} permissao={!!permissao.ADMINISTRADOR} />
                             </>
                         )}
                         {permissao.USUARIO && (
@@ -83,11 +85,7 @@ const IndexHome = () => {
                                 <Grid size={{ xs: 12, lg: 3 }}>{/* <TemplateLivros /> */}usuário</Grid>
                             </>
                         )}
-                        {permissao.VISITANTE && (
-                            <>
-                                <Grid size={{ xs: 12 }}>{/* <TemplateLivros /> */}visitante</Grid>
-                            </>
-                        )}
+                        {permissao.VISITANTE && <TabelaListaExemplares permissao={!!permissao.VISITANTE} />}
                     </Grid>
                 </>
             )}
