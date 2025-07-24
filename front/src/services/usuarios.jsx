@@ -2,7 +2,7 @@ import { ApiClient } from "./api";
 
 const getUsuarios = async () => {
     const api = ApiClient();
-    const data = await api.get(`/usuario`);
+    const { data } = await api.get(`/usuario`);
     return data;
 };
 

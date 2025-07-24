@@ -5,6 +5,8 @@ import ResourceAvatar from "@/components/Avatar";
 import { UserAuth } from "@/context/auth";
 import { LogoutButton } from "@/components/buttons/LogoutButton";
 import CadastrarUsuario from "@/components/buttons/CadastrarUsuario";
+import CadastrarLivro from "@/components/buttons/CadastrarLivro";
+import TabelaListaUsuarios from "@/components/datatable/TabelaListaUsuarios";
 
 const IndexHome = () => {
     const theme = useTheme();
@@ -47,23 +49,14 @@ const IndexHome = () => {
                             <>
                                 <Grid size={{ xs: 12, lg: 3 }}>
                                     <Paper sx={{ p: 4, height: "100%" }}>
-                                        <ResourceAvatar sx={{ mt: -5, ml: -5 }} recurso={"User"} />
+                                        <ResourceAvatar sx={{ mt: -5, ml: -5 }} recurso={"Config"} />
 
                                         <Typography variant="h5" mb={3}>
                                             Ações de Administrador
                                         </Typography>
                                         <Stack spacing={4}>
                                             <CadastrarUsuario />
-                                            <Button
-                                                variant="contained"
-                                                fullWidth
-                                                color="secondary"
-                                                onClick={() => {
-                                                    /* navegar para cadastro de livro */
-                                                }}
-                                            >
-                                                Cadastrar Livro
-                                            </Button>
+                                            <CadastrarLivro />
                                             <Button
                                                 variant="contained"
                                                 fullWidth
@@ -77,6 +70,8 @@ const IndexHome = () => {
                                         </Stack>
                                     </Paper>
                                 </Grid>
+
+                                <TabelaListaUsuarios permissao={!!permissao.ADMINISTRADOR} />
                             </>
                         )}
                         {permissao.USUARIO && (
