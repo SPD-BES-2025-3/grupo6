@@ -20,6 +20,13 @@ springdoc:
     enabled: true
     operationsSorter: method
     tagsSorter: alpha
+    # Configurações adicionais para funcionar com JWT
+    csrf:
+      enabled: false
+    disable-swagger-default-url: true
+    display-request-duration: true
+    # Configurar o contexto path para o Swagger
+  show-actuator: false
 
 server:
   servlet:

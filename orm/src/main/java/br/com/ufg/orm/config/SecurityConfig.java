@@ -40,9 +40,16 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
-                .requestMatchers("OPTIONS", "/api/auth/**").permitAll() // OPTIONS apenas para rotas de auth
-                .requestMatchers("OPTIONS", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // OPTIONS para Swagger
+                // Rotas do Swagger - todas as variações possíveis
+                .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/swagger-ui/index.html").permitAll()
+                .requestMatchers("/v3/api-docs/**", "/v3/api-docs", "/v3/api-docs.yaml").permitAll()
+                .requestMatchers("/swagger-resources/**", "/swagger-resources").permitAll()
+                .requestMatchers("/webjars/**").permitAll()
+                .requestMatchers("/actuator/**").permitAll() // Se estiver usando Spring Boot Actuator
+                // Adicionar rotas considerando o context-path
+                .requestMatchers("/api/swagger-ui/**", "/api/v3/api-docs/**").permitAll()
+                // OPTIONS para todas as rotas do Swagger
+                .requestMatchers("OPTIONS", "/**").permitAll()
                 .anyRequest().authenticated()
             )
             .userDetailsService(userDetailsService)
