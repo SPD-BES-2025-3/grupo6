@@ -8,6 +8,7 @@ import CadastrarUsuario from "@/components/buttons/CadastrarUsuario";
 import CadastrarLivro from "@/components/buttons/CadastrarLivro";
 import TabelaListaUsuarios from "@/components/datatable/TabelaListaUsuarios";
 import TabelaListaLivros from "@/components/datatable/TabelaListaLivros";
+import CadastrarExemplar from "@/components/buttons/CadastrarExemplar";
 
 const IndexHome = () => {
     const theme = useTheme();
@@ -58,6 +59,7 @@ const IndexHome = () => {
                                         <Stack spacing={4}>
                                             <CadastrarUsuario />
                                             <CadastrarLivro />
+                                            <CadastrarExemplar />
                                             <Button
                                                 variant="contained"
                                                 fullWidth

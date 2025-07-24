@@ -8,10 +8,9 @@ import Icon from "@/helpers/iconHelper";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useAlert from "@/context/alert";
-import { cadastraUsuario } from "@/services/usuarios";
-import FormCadastrarLivro from "@/Forms/FormCadastrarLivro";
-import { cadastraLivro } from "@/services/livros";
+import { cadastraExemplar } from "@/services/livros";
 import { useQueryClient } from "@tanstack/react-query";
+import FormCadastrarExemplar from "@/Forms/FormCadastrarExemplar";
 
 const CloseButton = React.memo(function CloseButton({ onClose }) {
     return (
@@ -22,13 +21,13 @@ const CloseButton = React.memo(function CloseButton({ onClose }) {
 });
 
 const schema = yup.object().shape({
-    nome: yup.string().required("Campo obrigatório"),
-    autor: yup.string().required("Campo obrigatório"),
-    editora: yup.string().required("Campo obrigatório"),
-    anoLancamento: yup.string().required("Campo obrigatório"),
+    idLivro: yup.mixed().required("Campo obrigatório"),
+    conservacao: yup.mixed().required("Campo obrigatório"),
+    numeroEdicao: yup.number().required("Campo obrigatório"),
+    disponibilidade: yup.mixed().required("Campo obrigatório"),
 });
 
-const CadastrarLivro = () => {
+const CadastrarExemplar = () => {
     const { createModalAsync, createModal, AlertComponent } = useAlert();
     const queryClient = useQueryClient();
 
@@ -38,16 +37,16 @@ const CadastrarLivro = () => {
     const handleClose = React.useCallback(() => setOpen(false), []);
 
     const handleSubmit = async (data) => {
-        const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo cadastrar este livro?" });
+        const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo cadastrar este exemplar?" });
         if (!!isConfirmed) {
             try {
-                const response = await cadastraLivro(data);
+                const response = await cadastraExemplar(data);
                 if (response.status === 200) {
-                    createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Livro cadastrado com sucesso!</p> });
+                    createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Exemplar cadastrado com sucesso!</p> });
                     setOpen(false);
-                    queryClient.invalidateQueries(["get-livros"]);
+                    queryClient.invalidateQueries(["get-exemplares", "get-livros"]);
                 } else {
-                    createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao cadastrar o livro</p> });
+                    createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao cadastrar o exemplar</p> });
                 }
             } catch (erro) {
                 createModal("error", {
@@ -55,7 +54,7 @@ const CadastrarLivro = () => {
                     title: "Erro",
                     html: (
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                            <p style={{ textAlign: "center" }}>Ocorreu um erro ao cadastrar o livro</p>
+                            <p style={{ textAlign: "center" }}>Ocorreu um erro ao cadastrar o exemplar</p>
                             <p style={{ textAlign: "center" }}>{erro?.response?.data?.mensagem}</p>
                         </div>
                     ),
@@ -66,18 +65,18 @@ const CadastrarLivro = () => {
 
     return (
         <>
-            <Button variant="contained" fullWidth color="secondary" onClick={handleOpen}>
-                Cadastrar Livro
+            <Button variant="contained" fullWidth color="warning" onClick={handleOpen}>
+                Cadastrar Exemplar
             </Button>
             <Dialog fullWidth maxWidth="sm" open={open} onClose={handleClose}>
                 {open && (
                     <FormContainer onSuccess={(FormData) => handleSubmit(FormData)} resolver={yupResolver(schema)}>
                         <DialogTitle>
-                            Cadastrar Livro
+                            Cadastrar Exemplar
                             <CloseButton onClose={handleClose} />
                         </DialogTitle>
                         <DialogContent sx={{ m: 2 }}>
-                            <FormCadastrarLivro />
+                            <FormCadastrarExemplar />
                         </DialogContent>
                         <DialogActions>
                             <Button variant="outlined" color="error" onClick={handleClose} sx={{ mr: 1 }} startIcon={<Icon name="Cancel" />}>
@@ -95,4 +94,4 @@ const CadastrarLivro = () => {
     );
 };
 
-export default CadastrarLivro;
+export default CadastrarExemplar;

@@ -12,4 +12,40 @@ const cadastraLivro = async (dados) => {
     return data;
 };
 
-export { getLivros, cadastraLivro };
+const deletarLivro = async (id) => {
+    const api = ApiClient();
+    const data = await api.delete(`/livro/${id}`);
+    return data;
+};
+
+const updateLivro = async (dados) => {
+    const api = ApiClient();
+    const data = await api.put(`/livro`, dados);
+    return data;
+};
+
+const getExemplar = async () => {
+    const api = ApiClient();
+    const { data } = await api.get(`/exemplar`);
+    return data;
+};
+
+const cadastraExemplar = async (dados) => {
+    const api = ApiClient();
+    const data = await api.post(`/exemplar`, dados);
+    return data;
+};
+
+const deletarExemplar = async (id) => {
+    const api = ApiClient();
+    const data = await api.delete(`/exemplar/${id}`);
+    return data;
+};
+
+const updateExemplar = async (dados) => {
+    const api = ApiClient();
+    const data = await api.put(`/exemplar`, dados);
+    return data;
+};
+
+export { getLivros, cadastraLivro, deletarLivro, updateLivro, getExemplar, cadastraExemplar, deletarExemplar, updateExemplar };
