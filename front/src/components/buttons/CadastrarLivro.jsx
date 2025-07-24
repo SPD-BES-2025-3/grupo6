@@ -3,13 +3,14 @@ import React from "react";
 import { FormContainer } from "react-hook-form-mui";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from "@mui/material";
 
-import FormCadastrarUsuario from "@/Forms/FormCadastrarUsuario";
 import Icon from "@/helpers/iconHelper";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useAlert from "@/context/alert";
 import { cadastraUsuario } from "@/services/usuarios";
+import FormCadastrarLivro from "@/Forms/FormCadastrarLivro";
+import { cadastraLivro } from "@/services/livros";
 
 const CloseButton = React.memo(function CloseButton({ onClose }) {
     return (
@@ -21,11 +22,9 @@ const CloseButton = React.memo(function CloseButton({ onClose }) {
 
 const schema = yup.object().shape({
     nome: yup.string().required("Campo obrigatório"),
-    email: yup.string().email("E-mail inválido").required("Campo obrigatório"),
-    cpf: yup.string().required("Campo obrigatório"),
-    login: yup.string().required("Campo obrigatórioo"),
-    senha: yup.string().required("Campo obrigatório"),
-    permissoes: yup.mixed().required("Campo obrigatório"),
+    autor: yup.string().required("Campo obrigatório"),
+    editora: yup.string().required("Campo obrigatórioo"),
+    anoLancamento: yup.string().required("Campo obrigatório"),
 });
 
 const CadastrarLivro = () => {
@@ -37,17 +36,15 @@ const CadastrarLivro = () => {
     const handleClose = React.useCallback(() => setOpen(false), []);
 
     const handleSubmit = async (data) => {
-        const payload = { nome: data.nome, email: data.email, cpf: data.cpf, login: data.login, senha: data.senha, permissoes: [data.permissoes] };
-
-        const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo cadastrar este usuário?" });
+        const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo cadastrar este livro?" });
         if (!!isConfirmed) {
             try {
-                const response = await cadastraUsuario(payload);
+                const response = await cadastraLivro(data);
                 if (response.status === 200) {
-                    createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Usuário cadastrado com sucesso!</p> });
+                    createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Livro cadastrado com sucesso!</p> });
                     setOpen(false);
                 } else {
-                    createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao cadastrar o usuário</p> });
+                    createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao cadastrar o livro</p> });
                 }
             } catch (erro) {
                 createModal("error", {
@@ -55,7 +52,7 @@ const CadastrarLivro = () => {
                     title: "Erro",
                     html: (
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                            <p style={{ textAlign: "center" }}>Ocorreu um erro ao cadastrar o usuário</p>
+                            <p style={{ textAlign: "center" }}>Ocorreu um erro ao cadastrar o livro</p>
                             <p style={{ textAlign: "center" }}>{erro?.response?.data?.mensagem}</p>
                         </div>
                     ),
@@ -77,7 +74,7 @@ const CadastrarLivro = () => {
                             <CloseButton onClose={handleClose} />
                         </DialogTitle>
                         <DialogContent sx={{ m: 2 }}>
-                            <FormCadastrarUsuario />
+                            <FormCadastrarLivro />
                         </DialogContent>
                         <DialogActions>
                             <Button variant="outlined" color="error" onClick={handleClose} sx={{ mr: 1 }} startIcon={<Icon name="Cancel" />}>
