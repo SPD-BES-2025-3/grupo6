@@ -116,7 +116,7 @@ const TabelaListaLivros = ({ permissao, size = 12 }) => {
     return (
         <Grid size={{ xs: size }}>
             <Paper sx={{ p: 4, height: "100%" }}>
-                <ResourceAvatar sx={{ mt: -5, ml: -5 }} recurso={"User"} />
+                <ResourceAvatar sx={{ mt: -5, ml: -5 }} recurso={"Book"} />
 
                 <Typography variant="h5" mb={3}>
                     Lista de Livros

@@ -67,7 +67,7 @@ const TabelaListaUsuarios = ({ permissao, size = 12 }) => {
     return (
         <Grid size={{ xs: size }}>
             <Paper sx={{ p: 4, height: "100%" }}>
-                <ResourceAvatar sx={{ mt: -5, ml: -5 }} recurso={"Book"} />
+                <ResourceAvatar sx={{ mt: -5, ml: -5 }} recurso={"User"} />
 
                 <Typography variant="h5" mb={3}>
                     Lista de usuários
