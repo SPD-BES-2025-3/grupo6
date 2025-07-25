@@ -82,7 +82,28 @@ const IndexHome = () => {
                         )}
                         {permissao.USUARIO && (
                             <>
-                                <Grid size={{ xs: 12, lg: 3 }}>{/* <TemplateLivros /> */}usuário</Grid>
+                                <Grid size={{ xs: 12, lg: 3 }}>
+                                    <Paper sx={{ p: 4, height: "100%" }}>
+                                        <ResourceAvatar sx={{ mt: -5, ml: -5 }} recurso={"Config"} />
+
+                                        <Typography variant="h5" mb={3}>
+                                            Ações de Usuário
+                                        </Typography>
+                                        <Stack spacing={4}>
+                                            <Button
+                                                variant="contained"
+                                                fullWidth
+                                                color="success"
+                                                onClick={() => {
+                                                    /* navegar para reserva */
+                                                }}
+                                            >
+                                                Fazer Reserva
+                                            </Button>
+                                        </Stack>
+                                    </Paper>
+                                </Grid>
+                                <TabelaListaExemplares />
                             </>
                         )}
                         {permissao.VISITANTE && <TabelaListaExemplares />}

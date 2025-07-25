@@ -45,6 +45,11 @@ const TabelaListaUsuarios = ({ permissao, size = 12 }) => {
                 return formatDate(params.value);
             },
         },
+        {
+            field: "permissoes",
+            headerName: "Perfil",
+            flex: 1,
+        },
     ];
 
     const usuariosData = useQuery({

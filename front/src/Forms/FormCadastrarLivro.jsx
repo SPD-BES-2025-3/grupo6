@@ -1,7 +1,21 @@
 import { Grid } from "@mui/material";
-import { TextFieldElement } from "react-hook-form-mui";
+import { useEffect } from "react";
+import { TextFieldElement, useFormContext } from "react-hook-form-mui";
 
-const FormCadastrarLivro = ({}) => {
+const FormCadastrarLivro = ({ data }) => {
+    const { reset, setValue } = useFormContext();
+
+    useEffect(() => {
+        if (data) {
+            setTimeout(() => {
+                setValue("nome", data.nome);
+                setValue("autor", data.autor);
+                setValue("editora", data.editora);
+                setValue("anoLancamento", data.anoLancamento);
+                setValue("id", data.id);
+            }, 100);
+        }
+    }, [data, setValue]);
     return (
         <Grid container spacing={2} pt={2}>
             <Grid size={{ xs: 12 }}>
