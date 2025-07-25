@@ -22,18 +22,20 @@ const Login = () => {
     const handleSubmit = async (data) => {
         try {
             const result = await loginRequest(data);
-            if (!!result) {
-                if (!!result.result) {
-                    setLocalStorage("userData", JSON.stringify(result.dados));
-                    setDadosUser(result.dados);
+            console.log(result);
+            if (result.status === 200) {
+                if (!!result.data) {
+                    const dados = { perfil: result.data.permissoes[0], nome_usuario: result.data.nome };
+                    setLocalStorage("userData", JSON.stringify(dados));
+                    setDadosUser(dados);
                     setUser(true);
                 }
             }
         } catch (error) {
-            console.error(error);
+            console.log(error);
             createModal("error", {
                 title: "Não foi possível realizar o login",
-                html: error?.response?.data?.message,
+                html: error?.response?.data,
                 dontShowCancel: true,
             });
         }
@@ -46,8 +48,8 @@ const Login = () => {
     };
 
     const schema = yup.object().shape({
-        LOGIN: yup.string().required("Login é obrigatório"),
-        SENHA: yup.string().required("Senha é obrigatória"),
+        login: yup.string().required("Login é obrigatório"),
+        senha: yup.string().required("Senha é obrigatória"),
     });
 
     return (
@@ -93,7 +95,7 @@ const Login = () => {
                                         <TextFieldElement
                                             fullWidth
                                             id="login"
-                                            name="LOGIN"
+                                            name="login"
                                             label="Login" // Adicione um label se necessário
                                             sx={{
                                                 // Estilizando o texto de entrada
@@ -137,7 +139,7 @@ const Login = () => {
                                     <div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.4 }} style={{ marginBottom: 20 }}>
                                         <PasswordElement
                                             fullWidth
-                                            name="SENHA"
+                                            name="senha"
                                             label="Senha"
                                             renderIcon={(visable) => (visable ? <Icon name="NotVisible" /> : <Icon name="View" />)}
                                             sx={{

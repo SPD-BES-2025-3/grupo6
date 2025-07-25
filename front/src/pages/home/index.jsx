@@ -14,6 +14,7 @@ import TabelaListaExemplares from "@/components/datatable/TabelaListaExemplares"
 const IndexHome = () => {
     const theme = useTheme();
     const { dadosUser } = UserAuth();
+    console.log(dadosUser);
     const perfil = dadosUser && dadosUser.perfil;
 
     const permissao = {
