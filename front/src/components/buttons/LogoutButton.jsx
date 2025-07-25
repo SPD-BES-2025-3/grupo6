@@ -4,12 +4,13 @@ import Icon from "@/helpers/iconHelper";
 import { IconButton, useTheme } from "@mui/material";
 
 export const LogoutButton = () => {
-    const { setUser } = UserAuth();
+    const { setUser, setToken } = UserAuth();
     const theme = useTheme();
 
     const handleLogout = () => {
         clearLocalStorageByPrefix("biblioteca-spd");
         setUser(false);
+        setToken(false);
     };
 
     return (

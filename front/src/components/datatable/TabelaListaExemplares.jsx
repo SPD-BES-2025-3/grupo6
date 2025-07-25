@@ -30,7 +30,6 @@ const TabelaListaExemplares = ({ permissao = false, size = 12 }) => {
         if (!!isConfirmed) {
             try {
                 const response = await deletarExemplar(id);
-                console.log(response);
                 if (response.status !== 500 && response.status !== 404) {
                     createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Exemplar deletado com sucesso!</p> });
                     queryClient.invalidateQueries(["get-exemplares", "get-livros"]);
@@ -38,7 +37,6 @@ const TabelaListaExemplares = ({ permissao = false, size = 12 }) => {
                     createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao deletar o exemplar</p> });
                 }
             } catch (erro) {
-                console.error(erro);
                 createModal("error", {
                     showConfirmButton: true,
                     title: "Erro",

@@ -1,7 +1,10 @@
-import { ApiClient } from "./api";
+import axios from "axios";
+
+const api = axios.create({
+    baseURL: process.env.BASE_API_URL,
+});
 
 const loginRequest = async (payload) => {
-    const api = ApiClient();
     const data = await api.post(`/auth/login`, payload);
     return data;
 };

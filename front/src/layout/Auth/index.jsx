@@ -16,23 +16,23 @@ import { yupResolver } from "@hookform/resolvers/yup";
 const Login = () => {
     const theme = useTheme();
     const { createModal, AlertComponent } = useAlert();
-    const { setUser, setDadosUser } = UserAuth();
+    const { setUser, setDadosUser, setToken } = UserAuth();
     const { setLocalStorage } = useLocalStorage();
 
     const handleSubmit = async (data) => {
         try {
             const result = await loginRequest(data);
-            console.log(result);
             if (result.status === 200) {
                 if (!!result.data) {
-                    const dados = { perfil: result.data.permissoes[0], nome_usuario: result.data.nome };
+                    const dados = { perfil: result.data.permissoes[0], nome_usuario: result.data.nome, token: result.data.token };
+                    setLocalStorage("tokenJWT", result.data.token);
+                    setToken(result.data.token);
                     setLocalStorage("userData", JSON.stringify(dados));
                     setDadosUser(dados);
                     setUser(true);
                 }
             }
         } catch (error) {
-            console.log(error);
             createModal("error", {
                 title: "Não foi possível realizar o login",
                 html: error?.response?.data,
