@@ -1,7 +1,7 @@
 import { Grid, IconButton, Paper, Tooltip, Typography, useTheme } from "@mui/material";
 import ResourceAvatar from "../Avatar";
 import TableQuery from "@/components/datatable";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { deletarExemplar, getExemplares } from "@/services/livros";
 import { formatDate } from "@/helpers/format";
 import useAlert from "@/context/alert";
@@ -10,6 +10,8 @@ import EditarExemplar from "../buttons/EditarExemplar";
 
 const TabelaListaExemplares = ({ permissao = false, size = 12 }) => {
     const theme = useTheme();
+    const queryClient = useQueryClient();
+
     const { createModalAsync, createModal, AlertComponent } = useAlert();
 
     const exemplaresData = useQuery({
@@ -28,14 +30,15 @@ const TabelaListaExemplares = ({ permissao = false, size = 12 }) => {
         if (!!isConfirmed) {
             try {
                 const response = await deletarExemplar(id);
+                console.log(response);
                 if (response.status !== 500 && response.status !== 404) {
                     createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Exemplar deletado com sucesso!</p> });
-                    setOpen(false);
                     queryClient.invalidateQueries(["get-exemplares", "get-livros"]);
                 } else {
                     createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao deletar o exemplar</p> });
                 }
             } catch (erro) {
+                console.error(erro);
                 createModal("error", {
                     showConfirmButton: true,
                     title: "Erro",
