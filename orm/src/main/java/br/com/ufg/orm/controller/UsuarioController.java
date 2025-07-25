@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,6 +28,7 @@ public class UsuarioController {
     private final UsuarioRepository usuarioRepository;
     private final IncluirUsuario incluirUsuario;
 
+    @Transactional(readOnly = true)
     @GetMapping("/{id}")
     @Operation(summary = "Buscar usuário por ID", description = "Retorna um usuário específico baseado no ID fornecido")
     @ApiResponses(value = {
@@ -43,6 +45,7 @@ public class UsuarioController {
         return ResponseEntity.ok(UsuarioResponseDto.from(usuario));
     }
 
+    @Transactional(readOnly = true)
     @GetMapping
     @Operation(summary = "Listar todos os usuários", description = "Retorna uma lista com todos os usuários cadastrados")
     @ApiResponses(value = {

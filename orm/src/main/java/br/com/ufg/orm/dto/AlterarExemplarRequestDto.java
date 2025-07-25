@@ -8,7 +8,6 @@ import br.com.ufg.orm.model.Livro;
 public record AlterarExemplarRequestDto(
         Long id,
         Long idLivro,
-        String codigoIdentificacao,
         Conservacao conservacao,
         Integer numeroEdicao,
         Disponibilidade disponibilidade
@@ -17,7 +16,6 @@ public record AlterarExemplarRequestDto(
         return Exemplar.builder()
                 .id(id)
                 .livro(Livro.builder().id(idLivro).build())
-                .codigoIdentificacao(codigoIdentificacao)
                 .conservacao(conservacao)
                 .numeroEdicao(numeroEdicao)
                 .disponibilidade(disponibilidade)

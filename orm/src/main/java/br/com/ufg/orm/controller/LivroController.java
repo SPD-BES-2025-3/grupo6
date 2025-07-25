@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,6 +30,7 @@ public class LivroController {
     private final AlterarLivro alterarLivro;
     private final ExcluirLivro excluirLivro;
 
+    @Transactional(readOnly = true)
     @GetMapping
     @Operation(summary = "Listar todos os livros", description = "Retorna uma lista com todos os livros cadastrados")
     @ApiResponses(value = {
@@ -41,6 +43,7 @@ public class LivroController {
         return ResponseEntity.ok(LivroResponseDto.from(livros));
     }
 
+    @Transactional(readOnly = true)
     @GetMapping("/{id}")
     @Operation(summary = "Buscar livro por ID", description = "Retorna um livro específico baseado no ID fornecido")
     @ApiResponses(value = {

@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class ExemplarController {
     private final AlterarExemplar alterarExemplar;
     private final ExcluirExemplar excluirExemplar;
 
+    @Transactional(readOnly = true)
     @GetMapping
     @Operation(summary = "Listar todos os exemplares", description = "Retorna uma lista com todos os exemplares cadastrados")
     @ApiResponses(value = {
@@ -44,6 +46,7 @@ public class ExemplarController {
         return ResponseEntity.ok(ExemplarResponseDto.from(exemplares));
     }
 
+    @Transactional(readOnly = true)
     @GetMapping("/{id}")
     @Operation(summary = "Buscar exemplar por ID", description = "Retorna um exemplar específico baseado no ID fornecido")
     @ApiResponses(value = {
