@@ -2,8 +2,8 @@ package br.com.ufg.orm.controller;
 
 import br.com.ufg.orm.dto.ReservaRequestDto;
 import br.com.ufg.orm.dto.ReservaResponseDto;
-import br.com.ufg.orm.enums.StatusReserva;
 import br.com.ufg.orm.repository.ReservaRepository;
+import br.com.ufg.orm.useCase.reserva.CancelarReserva;
 import br.com.ufg.orm.useCase.reserva.ReservarExemplar;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,6 +27,7 @@ public class ReservaController {
 
     private final ReservaRepository reservaRepository;
     private final ReservarExemplar reservarExemplar;
+    private final CancelarReserva cancelarReserva;
 
     @Transactional(readOnly = true)
     @GetMapping("/{id}")
@@ -76,7 +77,6 @@ public class ReservaController {
         return ResponseEntity.ok(ReservaResponseDto.from(reservarExemplar.executar(requestDto.toReserva())));
     }
 
-    @Transactional
     @PutMapping("/cancelar/{id}")
     @Operation(summary = "Cancelar reserva", description = "Cancela uma reserva existente alterando seu status para CANCELADA")
     @ApiResponses(value = {
@@ -89,10 +89,7 @@ public class ReservaController {
             @Parameter(description = "ID da reserva a ser cancelada", required = true)
             @PathVariable("id") Long id) {
         return reservaRepository.findById(id)
-                .map(reserva -> {
-                    reserva.setStatusReserva(StatusReserva.CANCELADA);
-                    return ResponseEntity.ok(ReservaResponseDto.from(reservaRepository.save(reserva)));
-                })
+                .map(reserva -> ResponseEntity.ok(ReservaResponseDto.from(cancelarReserva.executar(reserva))))
                 .orElse(ResponseEntity.notFound().build());
     }
 }
