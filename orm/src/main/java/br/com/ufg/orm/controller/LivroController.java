@@ -2,8 +2,12 @@ package br.com.ufg.orm.controller;
 
 import br.com.ufg.orm.dto.IncluirLIvroRequestDto;
 import br.com.ufg.orm.dto.LivroResponseDto;
+import br.com.ufg.orm.dto.ExemplarResponseDto;
 import br.com.ufg.orm.model.Livro;
+import br.com.ufg.orm.model.Exemplar;
 import br.com.ufg.orm.repository.LivroRepository;
+import br.com.ufg.orm.repository.ExemplarRepository;
+import br.com.ufg.orm.enums.Disponibilidade;
 import br.com.ufg.orm.useCase.livro.AlterarLivro;
 import br.com.ufg.orm.useCase.livro.ExcluirLivro;
 import br.com.ufg.orm.useCase.livro.IncluirLivro;
@@ -19,6 +23,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/livro")
@@ -27,6 +33,7 @@ public class LivroController {
 
     private final IncluirLivro incluirLivro;
     private final LivroRepository livroRepository;
+    private final ExemplarRepository exemplarRepository;
     private final AlterarLivro alterarLivro;
     private final ExcluirLivro excluirLivro;
 
@@ -109,5 +116,25 @@ public class LivroController {
         }
         excluirLivro.executar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/{id}/exemplares-disponiveis")
+    @Operation(summary = "Listar exemplares disponíveis de um livro", description = "Retorna todos os exemplares disponíveis de um livro específico")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de exemplares disponíveis retornada com sucesso",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExemplarResponseDto.class))),
+        @ApiResponse(responseCode = "404", description = "Livro não encontrado", content = @Content),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content)
+    })
+    public ResponseEntity<List<ExemplarResponseDto>> getExemplaresDisponiveis(
+            @Parameter(description = "ID do livro para listar exemplares disponíveis", required = true)
+            @PathVariable Long id) {
+        if (!livroRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<Exemplar> exemplaresDisponiveis = exemplarRepository.findAllByLivroIdAndDisponibilidade(id, Disponibilidade.DISPONIVEL);
+        return ResponseEntity.ok(ExemplarResponseDto.from(exemplaresDisponiveis));
     }
 }
