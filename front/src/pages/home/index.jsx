@@ -29,7 +29,7 @@ const IndexHome = () => {
             {dadosUser && (
                 <>
                     <Grid container spacing={4}>
-                        <Grid size={{ xs: 12, lg: !!permissao.ADMINISTRADOR || !!permissao.USUARIO ? 9 : 12 }}>
+                        <Grid size={{ xs: 12, lg: !!permissao.ADMINISTRADOR && 12 }}>
                             <Paper sx={{ p: 4, height: "100%" }}>
                                 <ResourceAvatar sx={{ mt: -5, ml: -5 }} recurso={"Home"} color={theme.colors.gradients.blue2} />
                                 <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" height="100%" mb={12}>
@@ -62,13 +62,7 @@ const IndexHome = () => {
                                             <CadastrarUsuario />
                                             <CadastrarLivro />
                                             <CadastrarExemplar />
-                                            <Button
-                                                variant="contained"
-                                                fullWidth
-                                                color="success"
-                                                onClick={() => {
-                                                }}
-                                            >
+                                            <Button variant="contained" fullWidth color="success" onClick={() => {}}>
                                                 Fazer Empréstimo
                                             </Button>
                                         </Stack>
@@ -102,8 +96,8 @@ const IndexHome = () => {
                                         </Stack>
                                     </Paper>
                                 </Grid> */}
-                                <TabelaListaLivros permissao={permissao}/>
-                                <TabelaListaReservas/>
+                                <TabelaListaLivros permissao={permissao} />
+                                <TabelaListaReservas />
                             </>
                         )}
                         {permissao.VISITANTE && <TabelaListaLivros />}

@@ -9,6 +9,7 @@ import EditarLivro from "../buttons/EditarLivro";
 import FazerReserva from "../buttons/FazerReserva";
 import { UserAuth } from "@/context/auth";
 import { getReservas } from "@/services/reservas";
+import { useEffect } from "react";
 
 const TabelaListaReservas = ({ permissao = false, size = 12 }) => {
     console.log(permissao);
@@ -28,6 +29,11 @@ const TabelaListaReservas = ({ permissao = false, size = 12 }) => {
             }
         },
     });
+
+    useEffect(() => {
+            console.log(reservasData.data)
+        
+    }, [reservasData.data]);
 
     const handleRemove = async (id) => {
         const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo apagar este livro?" });
@@ -123,7 +129,7 @@ const TabelaListaReservas = ({ permissao = false, size = 12 }) => {
                 <Typography variant="h5" mb={3}>
                     Lista de Reservas
                 </Typography>
-                <TableQuery columns={columnsLivrosCadastrados} dataTable={reservasData} id="id" />
+                {/* <TableQuery columns={columnsLivrosCadastrados} dataTable={reservasData} id="id" /> */}
             </Paper>
             {AlertComponent}
         </Grid>
