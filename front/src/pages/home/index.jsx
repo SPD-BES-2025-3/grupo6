@@ -66,23 +66,22 @@ const IndexHome = () => {
                                                 fullWidth
                                                 color="success"
                                                 onClick={() => {
-                                                    /* navegar para reserva */
                                                 }}
                                             >
-                                                Fazer Reserva
+                                                Fazer Empréstimo
                                             </Button>
                                         </Stack>
                                     </Paper>
                                 </Grid>
 
-                                <TabelaListaLivros size={6} permissao={!!permissao.ADMINISTRADOR} />
+                                <TabelaListaLivros size={6} permissao={permissao} />
                                 <TabelaListaExemplares size={6} permissao={!!permissao.ADMINISTRADOR} />
                                 <TabelaListaUsuarios size={12} permissao={!!permissao.ADMINISTRADOR} />
                             </>
                         )}
                         {permissao.USUARIO && (
                             <>
-                                <Grid size={{ xs: 12, lg: 3 }}>
+                                {/* <Grid size={{ xs: 12, lg: 3 }}>
                                     <Paper sx={{ p: 4, height: "100%" }}>
                                         <ResourceAvatar sx={{ mt: -5, ml: -5 }} recurso={"Config"} />
 
@@ -95,18 +94,17 @@ const IndexHome = () => {
                                                 fullWidth
                                                 color="success"
                                                 onClick={() => {
-                                                    /* navegar para reserva */
                                                 }}
                                             >
                                                 Fazer Reserva
                                             </Button>
                                         </Stack>
                                     </Paper>
-                                </Grid>
-                                <TabelaListaExemplares />
+                                </Grid> */}
+                                <TabelaListaLivros permissao={permissao}/>
                             </>
                         )}
-                        {permissao.VISITANTE && <TabelaListaExemplares />}
+                        {permissao.VISITANTE && <TabelaListaLivros />}
                     </Grid>
                 </>
             )}

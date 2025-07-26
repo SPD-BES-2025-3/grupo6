@@ -24,7 +24,7 @@ const Login = () => {
             const result = await loginRequest(data);
             if (result.status === 200) {
                 if (!!result.data) {
-                    const dados = { perfil: result.data.permissoes[0], nome_usuario: result.data.nome, token: result.data.token };
+                    const dados = { perfil: result.data.permissoes[0], nome_usuario: result.data.nome, token: result.data.token, id: result.data.id };
                     setLocalStorage("tokenJWT", result.data.token);
                     setToken(result.data.token);
                     setLocalStorage("userData", JSON.stringify(dados));

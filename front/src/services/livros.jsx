@@ -60,4 +60,10 @@ const getLivro = async (id) => {
     return data;
 };
 
-export { getLivros, cadastraLivro, deletarLivro, updateLivro, getExemplares, cadastraExemplar, deletarExemplar, updateExemplar, getExemplar, getLivro };
+const getExemplaresPorLivro = async (id) => {
+    const api = ApiClient();
+    const { data } = await api.get(`/livro/${id}/exemplares-disponiveis`);
+    return data;
+};
+
+export { getLivros, cadastraLivro, deletarLivro, updateLivro, getExemplares, cadastraExemplar, deletarExemplar, updateExemplar, getExemplar, getLivro, getExemplaresPorLivro };

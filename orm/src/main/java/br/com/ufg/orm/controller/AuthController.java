@@ -45,6 +45,7 @@ public class AuthController {
             LoginResponseDto response = LoginResponseDto.builder()
                 .token(token)
                 .nome(userPrincipal.getNome())
+                .id(userPrincipal.getId())
                 .login(userPrincipal.getUsername())
                 .permissoes(userPrincipal.getPermissoes())
                 .build();

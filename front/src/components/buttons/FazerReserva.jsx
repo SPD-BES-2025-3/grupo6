@@ -8,9 +8,10 @@ import Icon from "@/helpers/iconHelper";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useAlert from "@/context/alert";
-import { getExemplar, updateExemplar } from "@/services/livros";
+import { getExemplar } from "@/services/livros";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import FormCadastrarExemplar from "@/Forms/FormCadastrarExemplar";
+import FormReservarExemplar from "@/Forms/FormReservarExemplar";
+import { cadastraReserva } from "@/services/reservas";
 
 const CloseButton = React.memo(function CloseButton({ onClose }) {
     return (
@@ -21,13 +22,12 @@ const CloseButton = React.memo(function CloseButton({ onClose }) {
 });
 
 const schema = yup.object().shape({
-    idLivro: yup.mixed().required("Campo obrigatório"),
-    conservacao: yup.mixed().required("Campo obrigatório"),
-    numeroEdicao: yup.number().required("Campo obrigatório"),
-    disponibilidade: yup.mixed().required("Campo obrigatório"),
+    idExemplar: yup.string().required("Campo obrigatório"),
+    dataPrevistaRetirada: yup.date().required("Campo obrigatório"),
+    observacoes: yup.string().nullable(),
 });
 
-const EditarExemplar = ({ id }) => {
+const FazerReserva = ({ idLivro, nomeLivro }) => {
     const theme = useTheme();
 
     const { createModalAsync, createModal, AlertComponent } = useAlert();
@@ -39,16 +39,17 @@ const EditarExemplar = ({ id }) => {
     const handleClose = React.useCallback(() => setOpen(false), []);
 
     const handleSubmit = async (data) => {
-        const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo editar este exemplar?" });
+        const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo reservar este exemplar?" });
         if (!!isConfirmed) {
             try {
-                const response = await updateExemplar(data);
+                const payload = {...data, dataReserva: new Date()}
+                const response = await cadastraReserva(payload);
                 if (response.status === 200) {
-                    createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Exemplar editado com sucesso!</p> });
+                    createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Exemplar reservado com sucesso!</p> });
                     setOpen(false);
-                    queryClient.invalidateQueries(["get-exemplares", "get-livros"]);
+                    queryClient.invalidateQueries(["get-livros", "get-exemplares"]);
                 } else {
-                    createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao editar o exemplar</p> });
+                    createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao reservar o exemplar</p> });
                 }
             } catch (erro) {
                 createModal("error", {
@@ -56,7 +57,7 @@ const EditarExemplar = ({ id }) => {
                     title: "Erro",
                     html: (
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                            <p style={{ textAlign: "center" }}>Ocorreu um erro ao editar o exemplar</p>
+                            <p style={{ textAlign: "center" }}>Ocorreu um erro ao reservar o exemplar</p>
                             <p style={{ textAlign: "center" }}>{erro?.response?.data?.mensagem}</p>
                         </div>
                     ),
@@ -79,20 +80,20 @@ const EditarExemplar = ({ id }) => {
 
     return (
         <>
-            <Tooltip title={"Editar Exemplar"} placement="top" disableInteractive>
+            <Tooltip title={"Fazer Reserva"} placement="top" disableInteractive>
                 <IconButton onClick={handleOpen}>
-                    <Icon name="Edit" style={{ fill: theme.colors.warning.dark }} />
+                    <Icon name="Reservation" style={{ fill: theme.colors.secondary.dark }} />
                 </IconButton>
             </Tooltip>
             <Dialog fullWidth maxWidth="sm" open={open} onClose={handleClose}>
                 {open && (
                     <FormContainer onSuccess={(FormData) => handleSubmit(FormData)} resolver={yupResolver(schema)}>
                         <DialogTitle>
-                            Editar Exemplar
+                            Reservar Exemplar - {nomeLivro}
                             <CloseButton onClose={handleClose} />
                         </DialogTitle>
                         <DialogContent sx={{ m: 2 }}>
-                            <FormCadastrarExemplar data={exemplarData.data} />
+                            <FormReservarExemplar idLivro={idLivro} nomeLivro={nomeLivro} />
                         </DialogContent>
                         <DialogActions>
                             <Button variant="outlined" color="error" onClick={handleClose} sx={{ mr: 1 }} startIcon={<Icon name="Cancel" />}>
@@ -110,4 +111,4 @@ const EditarExemplar = ({ id }) => {
     );
 };
 
-export default EditarExemplar;
+export default FazerReserva;

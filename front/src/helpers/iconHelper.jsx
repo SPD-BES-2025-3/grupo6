@@ -52,6 +52,7 @@ import { FaRegStar } from "react-icons/fa";
 import { MdOutlineZoomIn } from "react-icons/md";
 import { MdOutlineZoomOut } from "react-icons/md";
 import { FaBook } from "react-icons/fa";
+import { BsBookmarkCheckFill } from "react-icons/bs";
 
 const iconMap = {
     Book: FaBook,
@@ -163,6 +164,7 @@ const iconMap = {
     Save: FaRegSave,
     Favorite: FaStar,
     NotFavorite: FaRegStar,
+    Reservation: BsBookmarkCheckFill,
 };
 
 const Icon = ({ name, ...props }) => {
