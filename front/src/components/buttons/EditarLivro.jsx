@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { FormContainer } from "react-hook-form-mui";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, useTheme } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip, useTheme } from "@mui/material";
 
 import Icon from "@/helpers/iconHelper";
 
@@ -79,9 +79,11 @@ const EditarLivro = ({ id }) => {
 
     return (
         <>
-            <IconButton onClick={handleOpen}>
-                <Icon name="Edit" style={{ fill: theme.colors.warning.dark }} />
-            </IconButton>
+            <Tooltip title={"Editar Livro"} placement="top" disableInteractive>
+                <IconButton onClick={handleOpen}>
+                    <Icon name="Edit" style={{ fill: theme.colors.warning.dark }} />
+                </IconButton>
+            </Tooltip>
             <Dialog fullWidth maxWidth="sm" open={open} onClose={handleClose}>
                 {open && (
                     <FormContainer onSuccess={(FormData) => handleSubmit(FormData)} resolver={yupResolver(schema)}>

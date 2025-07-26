@@ -16,5 +16,6 @@ public class LoginResponseDto {
     private String token;
     private String nome;
     private String login;
+    private Long id;
     private List<Permissao> permissoes;
 }

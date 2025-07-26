@@ -1,22 +1,22 @@
 import { Grid, IconButton, Paper, Tooltip, Typography, useTheme } from "@mui/material";
 import ResourceAvatar from "../Avatar";
 import TableQuery from "@/components/datatable";
-import { formatDate, montaMascaraCPF_CNPJ } from "@/helpers/format";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getUsuarios } from "@/services/usuarios";
 import { deletarLivro, getLivros } from "@/services/livros";
 import useAlert from "@/context/alert";
 import Icon from "@/helpers/iconHelper";
 import EditarLivro from "../buttons/EditarLivro";
+import FazerReserva from "../buttons/FazerReserva";
 
-const TabelaListaLivros = ({ permissao, size = 12 }) => {
+const TabelaListaLivros = ({ permissao = false, size = 12 }) => {
+    console.log(permissao);
     const theme = useTheme();
     const queryClient = useQueryClient();
 
     const { createModalAsync, createModal, AlertComponent } = useAlert();
 
     const livrosData = useQuery({
-        queryKey: ["get-livros", !!permissao],
+        queryKey: ["get-livros"],
         queryFn: async () => {
             const fetchFunc = getLivros;
             if (!!fetchFunc) {
@@ -24,7 +24,6 @@ const TabelaListaLivros = ({ permissao, size = 12 }) => {
                 return response;
             }
         },
-        enabled: !!permissao,
     });
 
     const handleRemove = async (id) => {
@@ -89,7 +88,7 @@ const TabelaListaLivros = ({ permissao, size = 12 }) => {
             headerAlign: "center",
             flex: 1.0,
             renderCell: (cellValues) => {
-                return permissao ? (
+                return !!permissao && !!permissao?.ADMINISTRADOR ? (
                     <Grid display="flex" justifyContent="center" alignItems="center" sx={{ width: "100%" }}>
                         <Tooltip title={"Remover"} placement="top" disableInteractive>
                             <IconButton
@@ -101,12 +100,14 @@ const TabelaListaLivros = ({ permissao, size = 12 }) => {
                             </IconButton>
                         </Tooltip>
 
-                        <Tooltip title={"Editar Exemplar"} placement="top" disableInteractive>
-                            <EditarLivro id={cellValues.row.id} />
-                        </Tooltip>
+                        <EditarLivro id={cellValues.row.id} />
                     </Grid>
                 ) : (
-                    <></>
+                    !!permissao.USUARIO && (
+                        <Grid display="flex" justifyContent="center" alignItems="center" sx={{ width: "100%" }}>
+                            {cellValues.row.quantidadeExemplares > 0 && <FazerReserva idLivro={cellValues.row.id} nomeLivro={cellValues.row.nome} />}
+                        </Grid>
+                    )
                 );
             },
         },

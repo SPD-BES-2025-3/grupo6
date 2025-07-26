@@ -10,6 +10,7 @@ import TabelaListaUsuarios from "@/components/datatable/TabelaListaUsuarios";
 import TabelaListaLivros from "@/components/datatable/TabelaListaLivros";
 import CadastrarExemplar from "@/components/buttons/CadastrarExemplar";
 import TabelaListaExemplares from "@/components/datatable/TabelaListaExemplares";
+import TabelaListaReservas from "@/components/datatable/TabelaListaReservas";
 
 const IndexHome = () => {
     const theme = useTheme();
@@ -28,7 +29,7 @@ const IndexHome = () => {
             {dadosUser && (
                 <>
                     <Grid container spacing={4}>
-                        <Grid size={{ xs: 12, lg: !!permissao.ADMINISTRADOR || !!permissao.USUARIO ? 9 : 12 }}>
+                        <Grid size={{ xs: 12, lg: !!permissao.ADMINISTRADOR ? 9 : 12 }}>
                             <Paper sx={{ p: 4, height: "100%" }}>
                                 <ResourceAvatar sx={{ mt: -5, ml: -5 }} recurso={"Home"} color={theme.colors.gradients.blue2} />
                                 <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" height="100%" mb={12}>
@@ -61,28 +62,21 @@ const IndexHome = () => {
                                             <CadastrarUsuario />
                                             <CadastrarLivro />
                                             <CadastrarExemplar />
-                                            <Button
-                                                variant="contained"
-                                                fullWidth
-                                                color="success"
-                                                onClick={() => {
-                                                    /* navegar para reserva */
-                                                }}
-                                            >
-                                                Fazer Reserva
+                                            <Button variant="contained" fullWidth color="success" onClick={() => {}}>
+                                                Fazer Empréstimo
                                             </Button>
                                         </Stack>
                                     </Paper>
                                 </Grid>
 
-                                <TabelaListaLivros size={6} permissao={!!permissao.ADMINISTRADOR} />
+                                <TabelaListaLivros size={6} permissao={permissao} />
                                 <TabelaListaExemplares size={6} permissao={!!permissao.ADMINISTRADOR} />
                                 <TabelaListaUsuarios size={12} permissao={!!permissao.ADMINISTRADOR} />
                             </>
                         )}
                         {permissao.USUARIO && (
                             <>
-                                <Grid size={{ xs: 12, lg: 3 }}>
+                                {/* <Grid size={{ xs: 12, lg: 3 }}>
                                     <Paper sx={{ p: 4, height: "100%" }}>
                                         <ResourceAvatar sx={{ mt: -5, ml: -5 }} recurso={"Config"} />
 
@@ -95,18 +89,18 @@ const IndexHome = () => {
                                                 fullWidth
                                                 color="success"
                                                 onClick={() => {
-                                                    /* navegar para reserva */
                                                 }}
                                             >
                                                 Fazer Reserva
                                             </Button>
                                         </Stack>
                                     </Paper>
-                                </Grid>
-                                <TabelaListaExemplares />
+                                </Grid> */}
+                                <TabelaListaLivros permissao={permissao} />
+                                <TabelaListaReservas />
                             </>
                         )}
-                        {permissao.VISITANTE && <TabelaListaExemplares />}
+                        {permissao.VISITANTE && <TabelaListaLivros />}
                     </Grid>
                 </>
             )}

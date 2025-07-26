@@ -57,21 +57,21 @@ const TabelaListaExemplares = ({ permissao = false, size = 12 }) => {
             headerName: "Código de identificação",
             flex: 1,
         },
-        {
-            field: "livroId",
-            headerName: "Código do livro",
-            flex: 1,
-        },
-        {
-            field: "livroNome",
-            headerName: "Titulo",
-            flex: 1,
-        },
-        {
-            field: "livroAutor",
-            headerName: "Autor",
-            flex: 1.2,
-        },
+        // {
+        //     field: "livroId",
+        //     headerName: "Código do livro",
+        //     flex: 1,
+        // },
+        // {
+        //     field: "livroNome",
+        //     headerName: "Titulo",
+        //     flex: 1,
+        // },
+        // {
+        //     field: "livroAutor",
+        //     headerName: "Autor",
+        //     flex: 1.2,
+        // },
         {
             field: "conservacao",
             headerName: "Estado de conservação",
@@ -115,9 +115,7 @@ const TabelaListaExemplares = ({ permissao = false, size = 12 }) => {
                             </IconButton>
                         </Tooltip>
 
-                        <Tooltip title={"Editar Exemplar"} placement="top" disableInteractive>
-                            <EditarExemplar id={cellValues.row.id} />
-                        </Tooltip>
+                        <EditarExemplar id={cellValues.row.id} />
                     </Grid>
                 ) : (
                     <></>
