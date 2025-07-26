@@ -1,8 +1,6 @@
 package br.com.ufg.orm.dto;
 
-import br.com.ufg.orm.model.Exemplar;
-import br.com.ufg.orm.model.Reserva;
-import br.com.ufg.orm.model.Usuario;
+import br.com.ufg.orm.model.*;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +20,7 @@ public record ReservaResponseDto (
         return new ReservaResponseDto(
                 reserva.getId(),
                 getUsuario(reserva.getUsuario()),
-                reserva.getExemplar(),
+                getExemplar(reserva.getEmprestimo()),
                 reserva.getDataReserva(),
                 reserva.getDataPrevistaRetirada(),
                 reserva.getDataLimiteRetirada(),
@@ -31,6 +29,27 @@ public record ReservaResponseDto (
                 reserva.getObservacoes(),
                 reserva.getEmprestimo() != null ? reserva.getEmprestimo().getId() : null
         );
+    }
+
+    private static Exemplar getExemplar(Emprestimo emprestimo) {
+        if (emprestimo == null || emprestimo.getExemplar() == null) return null;
+        Exemplar exemplar = emprestimo.getExemplar();
+        return Exemplar.builder()
+                .id(exemplar.getId())
+                .livro(getLivro(exemplar.getLivro()))
+                .disponibilidade(exemplar.getDisponibilidade())
+                .build();
+    }
+
+    private static Livro getLivro(Livro livro) {
+        if (livro == null) return null;
+        return Livro.builder()
+                .id(livro.getId())
+                .nome(livro.getNome())
+                .autor(livro.getAutor())
+                .editora(livro.getEditora())
+                .anoLancamento(livro.getAnoLancamento())
+                .build();
     }
 
     private static Usuario getUsuario(Usuario usuario) {
