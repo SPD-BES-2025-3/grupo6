@@ -3,9 +3,7 @@ import { CircularProgress, Grid } from "@mui/material";
 import Login from "./Auth";
 import { UserAuth } from "@/context/auth";
 
-
 const Layout = ({ children, title }) => {
-
     const { user, showSplash, animation, setAnimation } = UserAuth();
 
     React.useEffect(() => {
@@ -27,9 +25,7 @@ const Layout = ({ children, title }) => {
                 <>
                     {/* <Bar /> */}
 
-                    <div style={{ padding: 20, width: "100%", display: "flex", flexDirection: "column", flexGrow: 1, marginTop: 2 }}>
-                        {children}
-                    </div>
+                    <div style={{ padding: 20, width: "100%", display: "flex", flexDirection: "column", flexGrow: 1, marginTop: 2 }}>{children}</div>
                 </>
             )}
         </>
