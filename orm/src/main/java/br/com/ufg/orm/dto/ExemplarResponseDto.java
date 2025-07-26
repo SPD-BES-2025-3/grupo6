@@ -6,10 +6,12 @@ import br.com.ufg.orm.model.Exemplar;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public record ExemplarResponseDto(
         Long id,
+        Long livroId,
+        String livroNome,
+        String livroAutor,
         String codigoIdentificacao,
         Conservacao conservacao,
         Integer numeroEdicao,
@@ -17,8 +19,19 @@ public record ExemplarResponseDto(
         LocalDateTime dataCriacao
 ) {
     public static ExemplarResponseDto from(Exemplar exemplar) {
+        Long idLivro = null;
+        String livroNome = null;
+        String livroAutor = null;
+        if (exemplar.getLivro() != null) {
+            idLivro = exemplar.getLivro().getId();
+            livroNome = exemplar.getLivro().getNome();
+            livroAutor = exemplar.getLivro().getAutor();
+        }
         return new ExemplarResponseDto(
                 exemplar.getId(),
+                idLivro,
+                livroNome,
+                livroAutor,
                 exemplar.getCodigoIdentificacao(),
                 exemplar.getConservacao(),
                 exemplar.getNumeroEdicao(),
@@ -30,6 +43,6 @@ public record ExemplarResponseDto(
     public static List<ExemplarResponseDto> from(List<Exemplar> exemplares) {
         return exemplares.stream()
                 .map(ExemplarResponseDto::from)
-                .collect(Collectors.toList());
+                .toList();
     }
 }
