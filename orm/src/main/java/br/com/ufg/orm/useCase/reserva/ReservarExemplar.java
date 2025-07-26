@@ -26,10 +26,11 @@ public class ReservarExemplar implements UseCase<Reserva, Reserva> {
     @Transactional
     @Override
     public Reserva executar(Reserva reserva) {
-        validar(reserva);
         reserva.setDataReserva(LocalDateTime.now());
         reserva.setDataLimiteRetirada(reserva.getDataPrevistaRetirada().plusWeeks(1));
         reserva.setStatusReserva(StatusReserva.ATIVA);
+
+        validar(reserva);
 
         exemplarRepository.updateDisponibilidade(reserva.getExemplar().getId(), Disponibilidade.RESERVADO);
         return reservaRepository.save(reserva);
