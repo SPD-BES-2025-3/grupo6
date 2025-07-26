@@ -10,6 +10,7 @@ import TabelaListaUsuarios from "@/components/datatable/TabelaListaUsuarios";
 import TabelaListaLivros from "@/components/datatable/TabelaListaLivros";
 import CadastrarExemplar from "@/components/buttons/CadastrarExemplar";
 import TabelaListaExemplares from "@/components/datatable/TabelaListaExemplares";
+import TabelaListaReservas from "@/components/datatable/TabelaListaReservas";
 
 const IndexHome = () => {
     const theme = useTheme();
@@ -102,6 +103,7 @@ const IndexHome = () => {
                                     </Paper>
                                 </Grid> */}
                                 <TabelaListaLivros permissao={permissao}/>
+                                <TabelaListaReservas/>
                             </>
                         )}
                         {permissao.VISITANTE && <TabelaListaLivros />}
