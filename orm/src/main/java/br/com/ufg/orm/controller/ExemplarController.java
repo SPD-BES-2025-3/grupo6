@@ -41,8 +41,8 @@ public class ExemplarController {
                 content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExemplarResponseDto.class))),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content)
     })
-    public ResponseEntity<Iterable<ExemplarResponseDto>> getAllExemplares() {
-        Iterable<Exemplar> exemplares = exemplarRepository.findAll();
+    public ResponseEntity<List<ExemplarResponseDto>> getAllExemplares() {
+        List<Exemplar> exemplares = (List<Exemplar>) exemplarRepository.findAll();
         return ResponseEntity.ok(ExemplarResponseDto.from(exemplares));
     }
 

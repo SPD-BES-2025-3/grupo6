@@ -18,7 +18,7 @@ public class AlterarExemplar implements UseCase<Exemplar, Exemplar> {
 
     @Override
     public Exemplar executar(Exemplar exemplar) {
-        if (exemplar == null) {
+        if (exemplar == null || exemplar.getId() == null) {
             throw new NegocioException("Exemplar não pode ser null.");
         }
 
@@ -36,10 +36,6 @@ public class AlterarExemplar implements UseCase<Exemplar, Exemplar> {
 
     @Override
     public void validar(Exemplar exemplar) {
-        if (exemplar.getId() == null) {
-            throw new NegocioException("ID do exemplar não pode ser null.");
-        }
-
         Exemplar exemplarExistente = exemplarRepository.findById(exemplar.getId())
             .orElseThrow(() -> new NegocioException("Exemplar não encontrado com o ID: " + exemplar.getId()));
 

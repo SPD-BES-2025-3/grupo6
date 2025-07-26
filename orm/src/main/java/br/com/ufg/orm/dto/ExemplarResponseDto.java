@@ -6,13 +6,10 @@ import br.com.ufg.orm.model.Exemplar;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.StreamSupport;
+import java.util.stream.Collectors;
 
 public record ExemplarResponseDto(
         Long id,
-        Long livroId,
-        String livroNome,
-        String livroAutor,
         String codigoIdentificacao,
         Conservacao conservacao,
         Integer numeroEdicao,
@@ -22,9 +19,6 @@ public record ExemplarResponseDto(
     public static ExemplarResponseDto from(Exemplar exemplar) {
         return new ExemplarResponseDto(
                 exemplar.getId(),
-                exemplar.getLivro().getId(),
-                exemplar.getLivro().getNome(),
-                exemplar.getLivro().getAutor(),
                 exemplar.getCodigoIdentificacao(),
                 exemplar.getConservacao(),
                 exemplar.getNumeroEdicao(),
@@ -33,9 +27,9 @@ public record ExemplarResponseDto(
         );
     }
 
-    public static List<ExemplarResponseDto> from(Iterable<Exemplar> exemplares) {
-        return StreamSupport.stream(exemplares.spliterator(), false)
+    public static List<ExemplarResponseDto> from(List<Exemplar> exemplares) {
+        return exemplares.stream()
                 .map(ExemplarResponseDto::from)
-                .toList();
+                .collect(Collectors.toList());
     }
 }

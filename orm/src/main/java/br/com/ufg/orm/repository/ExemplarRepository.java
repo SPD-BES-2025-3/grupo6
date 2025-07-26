@@ -17,7 +17,10 @@ public interface ExemplarRepository extends CrudRepository<Exemplar, Long> {
 
     List<Exemplar> findAllByLivroId(Long livroId);
 
+    List<Exemplar> findAllByLivroIdAndDisponibilidade(Long livroId, Disponibilidade disponibilidade);
+
     @Modifying
     @Query("UPDATE Exemplar e SET e.disponibilidade = ?2 WHERE e.id = ?1")
     void updateDisponibilidade(Long id, Disponibilidade disponibilidade);
+
 }
