@@ -11,4 +11,10 @@ const cadastraReserva = async (dados) => {
     const data = await api.post(`/reserva`, dados);
     return data;
 };
-export { getReservas, cadastraReserva };
+
+const cancelaReserva = async (id) => {
+    const api = ApiClient();
+    const data = await api.put(`/reserva/cancelar/${id}`);
+    return data;
+};
+export { getReservas, cadastraReserva, cancelaReserva };

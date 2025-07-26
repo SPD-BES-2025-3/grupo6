@@ -2,20 +2,16 @@ import { Grid, IconButton, Paper, Tooltip, Typography, useTheme } from "@mui/mat
 import ResourceAvatar from "../Avatar";
 import TableQuery from "@/components/datatable";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { deletarLivro, getLivros } from "@/services/livros";
 import useAlert from "@/context/alert";
 import Icon from "@/helpers/iconHelper";
-import EditarLivro from "../buttons/EditarLivro";
-import FazerReserva from "../buttons/FazerReserva";
 import { UserAuth } from "@/context/auth";
-import { getReservas } from "@/services/reservas";
-import { useEffect } from "react";
+import { cancelaReserva, getReservas } from "@/services/reservas";
+import { formatDate } from "@/helpers/format";
 
-const TabelaListaReservas = ({ permissao = false, size = 12 }) => {
-    console.log(permissao);
+const TabelaListaReservas = ({ size = 12 }) => {
     const theme = useTheme();
     const queryClient = useQueryClient();
-    const {dadosUser} = UserAuth()
+    const { dadosUser } = UserAuth();
 
     const { createModalAsync, createModal, AlertComponent } = useAlert();
 
@@ -30,21 +26,16 @@ const TabelaListaReservas = ({ permissao = false, size = 12 }) => {
         },
     });
 
-    useEffect(() => {
-            console.log(reservasData.data)
-        
-    }, [reservasData.data]);
-
     const handleRemove = async (id) => {
-        const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo apagar este livro?" });
+        const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo cancelar esta reserva?" });
         if (!!isConfirmed) {
             try {
-                const response = await deletarLivro(id);
+                const response = await cancelaReserva(id);
                 if (response.status !== 500 && response.status !== 404) {
-                    createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Livro deletado com sucesso!</p> });
-                    queryClient.invalidateQueries(["get-exemplares", "get-livros"]);
+                    createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Reserva cancelada com sucesso!</p> });
+                    queryClient.invalidateQueries(["get-exemplares", "get-livros", "get-reservas"]);
                 } else {
-                    createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao deletar o livro</p> });
+                    createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao cancelar a reserva</p> });
                 }
             } catch (erro) {
                 createModal("error", {
@@ -52,7 +43,7 @@ const TabelaListaReservas = ({ permissao = false, size = 12 }) => {
                     title: "Erro",
                     html: (
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                            <p style={{ textAlign: "center" }}>Ocorreu um erro ao deletar o livro</p>
+                            <p style={{ textAlign: "center" }}>Ocorreu um erro ao cancelar a reserva</p>
                             <p style={{ textAlign: "center" }}>{erro?.response?.data?.mensagem}</p>
                         </div>
                     ),
@@ -61,62 +52,81 @@ const TabelaListaReservas = ({ permissao = false, size = 12 }) => {
         }
     };
 
-    const columnsLivrosCadastrados = [
+    const columnsLivrosReservados = [
         {
             field: "id",
-            headerName: "Código do livro",
+            headerName: "Código da Reserva",
         },
         {
-            field: "nome",
-            headerName: "Titulo",
+            field: "dataReserva",
+            headerName: "Data da Reserva",
             flex: 1,
+            sortable: true,
+            renderCell: (params) => {
+                return formatDate(params.value);
+            },
         },
         {
-            field: "autor",
-            headerName: "Autor",
+            field: "dataPrevistaRetirada",
+            headerName: "Data Prevista da Retirada",
+            flex: 1,
+            sortable: true,
+            renderCell: (params) => {
+                return formatDate(params.value);
+            },
+        },
+        {
+            field: "dataLimiteRetirada",
+            headerName: "Data Limite da Retirada",
+            flex: 1,
+            sortable: true,
+            renderCell: (params) => {
+                return formatDate(params.value);
+            },
+        },
+        {
+            field: "dataRetirada",
+            headerName: "Data da Retirada",
+            flex: 1,
+            sortable: true,
+            renderCell: (params) => {
+                return formatDate(params.value);
+            },
+        },
+
+        {
+            field: "observacoes",
+            headerName: "Observações",
             flex: 1.2,
         },
         {
-            field: "editora",
-            headerName: "Editora",
-            flex: 1,
-        },
-        {
-            field: "anoLancamento",
-            headerName: "Ano de lancamento",
-        },
-        {
-            field: "quantidadeExemplares",
-            headerName: "Quantidade de exemplares",
+            field: "statusReserva",
+            headerName: "Status da Reserva",
             flex: 1,
         },
         {
             field: "acao",
-            headerName: permissao && "Ações",
+            headerName: "Ações",
             sortable: true,
             headerAlign: "center",
             flex: 1.0,
             renderCell: (cellValues) => {
-                return !!permissao && !!permissao?.ADMINISTRADOR ? (
-                    <Grid display="flex" justifyContent="center" alignItems="center" sx={{ width: "100%" }}>
-                        <Tooltip title={"Remover"} placement="top" disableInteractive>
-                            <IconButton
-                                onClick={() => {
-                                    handleRemove(cellValues.row.id);
-                                }}
-                            >
-                                <Icon name="Trash" style={{ fill: theme.colors.error.dark }} />
-                            </IconButton>
-                        </Tooltip>
-
-                        <EditarLivro id={cellValues.row.id} />
-                    </Grid>
-                ) : (
-                    !!permissao.USUARIO && (
-                        <Grid display="flex" justifyContent="center" alignItems="center" sx={{ width: "100%" }}>
-                            {cellValues.row.quantidadeExemplares > 0 && <FazerReserva idLivro={cellValues.row.id} nomeLivro={cellValues.row.nome} />}
-                        </Grid>
-                    )
+                return (
+                    <>
+                        {cellValues.row.statusReserva !== "CANCELADA" && (
+                            <Grid display="flex" justifyContent="center" alignItems="center" sx={{ width: "100%" }}>
+                                <Tooltip title={"Cancelar"} placement="top" disableInteractive>
+                                    <IconButton
+                                        onClick={() => {
+                                            handleRemove(cellValues.row.id);
+                                        }}
+                                    >
+                                        <Icon name="Trash" style={{ fill: theme.colors.error.dark }} />
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                        )}
+                    </>
                 );
             },
         },
@@ -129,7 +139,7 @@ const TabelaListaReservas = ({ permissao = false, size = 12 }) => {
                 <Typography variant="h5" mb={3}>
                     Lista de Reservas
                 </Typography>
-                {/* <TableQuery columns={columnsLivrosCadastrados} dataTable={reservasData} id="id" /> */}
+                <TableQuery columns={columnsLivrosReservados} dataTable={reservasData} id="id" />
             </Paper>
             {AlertComponent}
         </Grid>
