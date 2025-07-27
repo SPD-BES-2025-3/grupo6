@@ -11,6 +11,7 @@ import TabelaListaLivros from "@/components/datatable/TabelaListaLivros";
 import CadastrarExemplar from "@/components/buttons/CadastrarExemplar";
 import TabelaListaExemplares from "@/components/datatable/TabelaListaExemplares";
 import TabelaListaReservas from "@/components/datatable/TabelaListaReservas";
+import CadastrarEmprestimo from "@/components/buttons/CadastrarEmprestimo";
 
 const IndexHome = () => {
     const theme = useTheme();
@@ -62,9 +63,7 @@ const IndexHome = () => {
                                             <CadastrarUsuario />
                                             <CadastrarLivro />
                                             <CadastrarExemplar />
-                                            <Button variant="contained" fullWidth color="success" onClick={() => {}}>
-                                                Fazer Empréstimo
-                                            </Button>
+                                            <CadastrarEmprestimo/>
                                         </Stack>
                                     </Paper>
                                 </Grid>
@@ -76,26 +75,6 @@ const IndexHome = () => {
                         )}
                         {permissao.USUARIO && (
                             <>
-                                {/* <Grid size={{ xs: 12, lg: 3 }}>
-                                    <Paper sx={{ p: 4, height: "100%" }}>
-                                        <ResourceAvatar sx={{ mt: -5, ml: -5 }} recurso={"Config"} />
-
-                                        <Typography variant="h5" mb={3}>
-                                            Ações de Usuário
-                                        </Typography>
-                                        <Stack spacing={4}>
-                                            <Button
-                                                variant="contained"
-                                                fullWidth
-                                                color="success"
-                                                onClick={() => {
-                                                }}
-                                            >
-                                                Fazer Reserva
-                                            </Button>
-                                        </Stack>
-                                    </Paper>
-                                </Grid> */}
                                 <TabelaListaLivros permissao={permissao} />
                                 <TabelaListaReservas />
                             </>
