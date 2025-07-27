@@ -66,4 +66,9 @@ public class CustomUserPrincipal implements UserDetails {
     public List<Permissao> getPermissoes() {
         return usuario.getPermissoes();
     }
+
+    public boolean podeManipularEmprestimos() {
+        return usuario.getPermissoes().contains(Permissao.ADMINISTRADOR) ||
+               usuario.getPermissoes().contains(Permissao.BIBLIOTECARIO);
+    }
 }

@@ -63,7 +63,7 @@ public class RealizarEmprestimo implements UseCase<Emprestimo, Emprestimo> {
 
         if (isEmprestimoPorReserva(emprestimo)){
             if (!isReservaValidaParaEmprestimo(emprestimo.getReserva(), emprestimo.getUsuario())){
-                throw new NegocioException("A reserva não é válida para o empréstimo pois não pertence ao usuário ou não está ativa.");
+                throw new NegocioException("A reserva não é válida para o empréstimo pois não pertence ao usuário informado ou não está ativa.");
             }
         }else {
             if (emprestimo.getExemplar() == null || emprestimo.getExemplar().getId() == null) {
