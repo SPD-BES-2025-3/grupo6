@@ -3,14 +3,11 @@ import ResourceAvatar from "../Avatar";
 import TableQuery from "@/components/datatable";
 import { formatDate } from "@/helpers/format";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { devolverEmprestimo, getEmprestimos, renovarEmprestimo } from "@/services/emprestimos";
+import { devolverEmprestimo, getEmprestimos, getEmprestimosPorUser, renovarEmprestimo } from "@/services/emprestimos";
 import Icon from "@/helpers/iconHelper";
 import useAlert from "@/context/alert";
 
-const TabelaListaEmprestimos = ({ size = 12, id }) => {
-    const theme = useTheme();
-    const { createModalAsync, createModal, AlertComponent } = useAlert();
-    const queryClient = useQueryClient();
+const TabelaListaEmprestimosPorUser = ({ size = 12, id }) => {
 
     const columnsEmprestimos = [
         {
@@ -72,45 +69,14 @@ const TabelaListaEmprestimos = ({ size = 12, id }) => {
             headerName: "Status do Empréstimo",
             flex: 1,
         },
-        {
-            field: "acao",
-            headerName: "Ações",
-            sortable: true,
-            headerAlign: "center",
-            flex: 1.0,
-            renderCell: (cellValues) => {
-                return (
-                    <Grid display="flex" justifyContent="center" alignItems="center" sx={{ width: "100%" }}>
-                        <Tooltip title={"Devolver Livro"} placement="top" disableInteractive>
-                            <IconButton
-                                onClick={() => {
-                                    handleDevolucao(cellValues.row.id);
-                                }}
-                            >
-                                <Icon name="Return" style={{ fill: theme.colors.primary.dark }} />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title={"Renovar Empréstimo"} placement="top" disableInteractive>
-                            <IconButton
-                                onClick={() => {
-                                    handleProrrogacao(cellValues.row.id);
-                                }}
-                            >
-                                <Icon name="Calendar" size={18} style={{ fill: theme.colors.secondary.dark }} />
-                            </IconButton>
-                        </Tooltip>
-                    </Grid>
-                );
-            },
-        },
     ];
 
     const emprestimosData = useQuery({
         queryKey: ["get-emprestimos"],
         queryFn: async () => {
-            const fetchFunc = getEmprestimos;
+            const fetchFunc = getEmprestimosPorUser;
             if (!!fetchFunc) {
-                const response = await getEmprestimos();
+                const response = await getEmprestimosPorUser(id);
                 return response;
             }
         },
@@ -126,9 +92,8 @@ const TabelaListaEmprestimos = ({ size = 12, id }) => {
                 </Typography>
                 <TableQuery columns={columnsEmprestimos} dataTable={emprestimosData} id="id" />
             </Paper>
-            {AlertComponent}
         </Grid>
     );
 };
 
-export default TabelaListaEmprestimos;
+export default TabelaListaEmprestimosPorUser;

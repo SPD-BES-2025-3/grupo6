@@ -13,6 +13,7 @@ import TabelaListaExemplares from "@/components/datatable/TabelaListaExemplares"
 import TabelaListaReservas from "@/components/datatable/TabelaListaReservas";
 import CadastrarEmprestimo from "@/components/buttons/CadastrarEmprestimo";
 import TabelaListaEmprestimos from "@/components/datatable/TabelaListaEmprestimos";
+import TabelaListaEmprestimosPorUser from "@/components/datatable/TabelaListaEmprestimosPorUser";
 
 const IndexHome = () => {
     const theme = useTheme();
@@ -64,7 +65,7 @@ const IndexHome = () => {
                                             <CadastrarUsuario />
                                             <CadastrarLivro />
                                             <CadastrarExemplar />
-                                            <CadastrarEmprestimo/>
+                                            <CadastrarEmprestimo />
                                         </Stack>
                                     </Paper>
                                 </Grid>
@@ -72,13 +73,14 @@ const IndexHome = () => {
                                 <TabelaListaLivros size={6} permissao={permissao} />
                                 <TabelaListaExemplares size={6} permissao={!!permissao.ADMINISTRADOR} />
                                 <TabelaListaUsuarios size={12} permissao={!!permissao.ADMINISTRADOR} />
-                                <TabelaListaEmprestimos />
+                                <TabelaListaEmprestimos permissao={!!permissao.ADMINISTRADOR} />
                             </>
                         )}
                         {permissao.USUARIO && (
                             <>
                                 <TabelaListaLivros permissao={permissao} />
                                 <TabelaListaReservas />
+                                <TabelaListaEmprestimosPorUser id={dadosUser.id} />
                             </>
                         )}
                         {permissao.VISITANTE && <TabelaListaLivros />}
