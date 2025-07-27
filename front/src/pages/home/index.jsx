@@ -12,6 +12,7 @@ import CadastrarExemplar from "@/components/buttons/CadastrarExemplar";
 import TabelaListaExemplares from "@/components/datatable/TabelaListaExemplares";
 import TabelaListaReservas from "@/components/datatable/TabelaListaReservas";
 import CadastrarEmprestimo from "@/components/buttons/CadastrarEmprestimo";
+import TabelaListaEmprestimos from "@/components/datatable/TabelaListaEmprestimos";
 
 const IndexHome = () => {
     const theme = useTheme();
@@ -71,6 +72,7 @@ const IndexHome = () => {
                                 <TabelaListaLivros size={6} permissao={permissao} />
                                 <TabelaListaExemplares size={6} permissao={!!permissao.ADMINISTRADOR} />
                                 <TabelaListaUsuarios size={12} permissao={!!permissao.ADMINISTRADOR} />
+                                <TabelaListaEmprestimos />
                             </>
                         )}
                         {permissao.USUARIO && (

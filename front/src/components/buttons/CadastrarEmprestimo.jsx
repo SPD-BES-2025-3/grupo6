@@ -57,7 +57,7 @@ const CadastrarEmprestimo = () => {
                 if (response.status === 201) {
                     createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Empréstimo realizado com sucesso!</p> });
                     setOpen(false);
-                    queryClient.invalidateQueries(["get-livros"]);
+                    queryClient.invalidateQueries(["get-emprestimos", "get-exemplares", "get-livros"]);
                 } else {
                     createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao realizar empréstimo</p> });
                 }
