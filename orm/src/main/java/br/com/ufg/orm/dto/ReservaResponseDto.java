@@ -1,6 +1,9 @@
 package br.com.ufg.orm.dto;
 
-import br.com.ufg.orm.model.*;
+import br.com.ufg.orm.model.Exemplar;
+import br.com.ufg.orm.model.Livro;
+import br.com.ufg.orm.model.Reserva;
+import br.com.ufg.orm.model.Usuario;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +23,7 @@ public record ReservaResponseDto (
         return new ReservaResponseDto(
                 reserva.getId(),
                 getUsuario(reserva.getUsuario()),
-                getExemplar(reserva.getEmprestimo()),
+                getExemplar(reserva.getExemplar()),
                 reserva.getDataReserva(),
                 reserva.getDataPrevistaRetirada(),
                 reserva.getDataLimiteRetirada(),
@@ -31,9 +34,8 @@ public record ReservaResponseDto (
         );
     }
 
-    private static Exemplar getExemplar(Emprestimo emprestimo) {
-        if (emprestimo == null || emprestimo.getExemplar() == null) return null;
-        Exemplar exemplar = emprestimo.getExemplar();
+    private static Exemplar getExemplar(Exemplar exemplar) {
+        if (exemplar == null) return null;
         return Exemplar.builder()
                 .id(exemplar.getId())
                 .livro(getLivro(exemplar.getLivro()))
