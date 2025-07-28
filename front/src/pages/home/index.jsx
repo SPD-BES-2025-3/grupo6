@@ -14,6 +14,7 @@ import TabelaListaReservas from "@/components/datatable/TabelaListaReservas";
 import CadastrarEmprestimo from "@/components/buttons/CadastrarEmprestimo";
 import TabelaListaEmprestimos from "@/components/datatable/TabelaListaEmprestimos";
 import TabelaListaEmprestimosPorUser from "@/components/datatable/TabelaListaEmprestimosPorUser";
+import TabelaListaLivrosPublica from "@/components/datatable/TabelaListaLivrosPublica";
 
 const IndexHome = () => {
     const theme = useTheme();
@@ -83,7 +84,7 @@ const IndexHome = () => {
                                 <TabelaListaEmprestimosPorUser id={dadosUser.id} />
                             </>
                         )}
-                        {permissao.VISITANTE && <TabelaListaLivros />}
+                        {permissao.VISITANTE && <TabelaListaLivrosPublica />}
                     </Grid>
                 </>
             )}
