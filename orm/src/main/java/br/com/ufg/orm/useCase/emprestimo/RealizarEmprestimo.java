@@ -34,7 +34,9 @@ public class RealizarEmprestimo implements UseCase<Emprestimo, Emprestimo> {
         emprestimo.setDataEmprestimo(LocalDateTime.now());
         emprestimo.setDataPrevistaDevolucao(LocalDateTime.now().plusWeeks(1));
         emprestimo.setRenovacoes(0);
-        if (emprestimo.getReserva() != null) {
+        if (emprestimo.getReserva() != null && emprestimo.getReserva().getId() != null) {
+            emprestimo.setReserva(reservaRepository.findById(emprestimo.getReserva().getId())
+                    .orElseThrow(() -> new NegocioException("Reserva não encontrada.")));
             emprestimo.setExemplar(emprestimo.getReserva().getExemplar());
             reservaRepository.alterarStatus(emprestimo.getReserva().getId(), StatusReserva.RETIRADA);
         }
