@@ -6,6 +6,7 @@ import br.com.ufg.odm.repository.ExemplarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +23,17 @@ public class ExemplarController {
     @GetMapping
     public ResponseEntity<List<ExemplarDTO>> listarExemplares() {
         List<Exemplar> exemplares = exemplarRepository.findAll();
+
+        List<ExemplarDTO> exemplaresDTO = exemplares.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(exemplaresDTO);
+    }
+
+    @GetMapping("/livro/{livroId}")
+    public ResponseEntity<List<ExemplarDTO>> listarExemplaresPorLivro(@PathVariable String livroId) {
+        List<Exemplar> exemplares = exemplarRepository.findByLivroId(livroId);
 
         List<ExemplarDTO> exemplaresDTO = exemplares.stream()
                 .map(this::convertToDTO)

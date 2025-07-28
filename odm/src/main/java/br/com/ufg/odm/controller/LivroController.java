@@ -3,7 +3,7 @@ package br.com.ufg.odm.controller;
 import br.com.ufg.odm.dto.LivroDTO;
 import br.com.ufg.odm.model.Livro;
 import br.com.ufg.odm.repository.LivroRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/livro")
+@RequiredArgsConstructor
 public class LivroController {
 
-    @Autowired
-    private LivroRepository livroRepository;
+    private final LivroRepository livroRepository;
 
     @GetMapping
     public ResponseEntity<List<LivroDTO>> listarLivros() {
