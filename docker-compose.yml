@@ -14,10 +14,6 @@ services:
   mongodb:
     image: mongodb/mongodb-community-server:latest
     container_name: mongodb-db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: mongo
-      MONGO_INITDB_ROOT_PASSWORD: mongo
-      MONGO_INITDB_DATABASE: spd_odm
     volumes:
       - mongodb_data:/data/db
     restart: unless-stopped

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +35,8 @@ public class ReservaController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     public ResponseEntity<List<ReservaDTO>> listarReservas() {
-        List<Reserva> reservas = reservaRepository.findAll();
+//        List<Reserva> reservas = reservaRepository.findAll();
+        List<Reserva> reservas = new ArrayList<>();
 
         List<ReservaDTO> reservasDTO = reservas.stream()
                 .map(this::convertToDTO)

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,8 @@ public class ExemplarController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     public ResponseEntity<List<ExemplarDTO>> listarExemplares() {
-        List<Exemplar> exemplares = exemplarRepository.findAll();
+//        List<Exemplar> exemplares = exemplarRepository.findAll();
+        List<Exemplar> exemplares = new ArrayList<>();
 
         List<ExemplarDTO> exemplaresDTO = exemplares.stream()
                 .map(this::convertToDTO)
@@ -55,7 +57,8 @@ public class ExemplarController {
     })
     public ResponseEntity<List<ExemplarDTO>> listarExemplaresPorLivro(
             @Parameter(description = "ID do livro", required = true) @PathVariable String livroId) {
-        List<Exemplar> exemplares = exemplarRepository.findByLivroId(livroId);
+//        List<Exemplar> exemplares = exemplarRepository.findByLivroId(livroId);
+        List<Exemplar> exemplares = new ArrayList<>();
 
         List<ExemplarDTO> exemplaresDTO = exemplares.stream()
                 .map(this::convertToDTO)
