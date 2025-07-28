@@ -12,6 +12,58 @@ const TabelaListaEmprestimos = ({ size = 12, id }) => {
     const { createModalAsync, createModal, AlertComponent } = useAlert();
     const queryClient = useQueryClient();
 
+    const handleDevolucao = async (id) => {
+        const { isConfirmed } = await createModalAsync("warning", { title: "Devolver", html: "Deseja mesmo registrar esta devolução?" });
+        if (!!isConfirmed) {
+            try {
+                const response = await devolverEmprestimo(id);
+                if (response.status !== 500 && response.status !== 404) {
+                    createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Exemplar devolvido com sucesso!</p> });
+                    queryClient.invalidateQueries(["get-exemplares", "get-livros", "get-emprestimos"]);
+                } else {
+                    createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao devolver o exemplar</p> });
+                }
+            } catch (erro) {
+                createModal("error", {
+                    showConfirmButton: true,
+                    title: "Erro",
+                    html: (
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                            <p style={{ textAlign: "center" }}>Ocorreu um erro ao devolver o exemplar</p>
+                            <p style={{ textAlign: "center" }}>{erro?.response?.data?.mensagem}</p>
+                        </div>
+                    ),
+                });
+            }
+        }
+    };
+
+    const handleProrrogacao = async (id) => {
+        const { isConfirmed } = await createModalAsync("warning", { title: "Renovar", html: "Deseja mesmo renovar este empréstimo?" });
+        if (!!isConfirmed) {
+            try {
+                const response = await devolverEmprestimo(id);
+                if (response.status !== 500 && response.status !== 404) {
+                    createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Empréstimo renovado com sucesso!</p> });
+                    queryClient.invalidateQueries(["get-exemplares", "get-livros", "get-emprestimos"]);
+                } else {
+                    createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao renovar o empréstimo</p> });
+                }
+            } catch (erro) {
+                createModal("error", {
+                    showConfirmButton: true,
+                    title: "Erro",
+                    html: (
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                            <p style={{ textAlign: "center" }}>Ocorreu um erro ao renovar o empréstimo</p>
+                            <p style={{ textAlign: "center" }}>{erro?.response?.data?.mensagem}</p>
+                        </div>
+                    ),
+                });
+            }
+        }
+    };
+
     const columnsEmprestimos = [
         {
             field: "id",
@@ -80,26 +132,30 @@ const TabelaListaEmprestimos = ({ size = 12, id }) => {
             flex: 1.0,
             renderCell: (cellValues) => {
                 return (
-                    <Grid display="flex" justifyContent="center" alignItems="center" sx={{ width: "100%" }}>
-                        <Tooltip title={"Devolver Livro"} placement="top" disableInteractive>
-                            <IconButton
-                                onClick={() => {
-                                    handleDevolucao(cellValues.row.id);
-                                }}
-                            >
-                                <Icon name="Return" style={{ fill: theme.colors.primary.dark }} />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title={"Renovar Empréstimo"} placement="top" disableInteractive>
-                            <IconButton
-                                onClick={() => {
-                                    handleProrrogacao(cellValues.row.id);
-                                }}
-                            >
-                                <Icon name="Calendar" size={18} style={{ fill: theme.colors.secondary.dark }} />
-                            </IconButton>
-                        </Tooltip>
-                    </Grid>
+                    <>
+                        {cellValues.row.status !== "DEVOLVIDO" && (
+                            <Grid display="flex" justifyContent="center" alignItems="center" sx={{ width: "100%" }}>
+                                <Tooltip title={"Devolver Livro"} placement="top" disableInteractive>
+                                    <IconButton
+                                        onClick={() => {
+                                            handleDevolucao(cellValues.row.id);
+                                        }}
+                                    >
+                                        <Icon name="Return" style={{ fill: theme.colors.primary.dark }} />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title={"Renovar Empréstimo"} placement="top" disableInteractive>
+                                    <IconButton
+                                        onClick={() => {
+                                            handleProrrogacao(cellValues.row.id);
+                                        }}
+                                    >
+                                        <Icon name="Calendar" size={18} style={{ fill: theme.colors.secondary.dark }} />
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                        )}
+                    </>
                 );
             },
         },
