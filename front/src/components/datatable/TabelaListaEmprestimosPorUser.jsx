@@ -1,14 +1,11 @@
-import { Grid, IconButton, Paper, Tooltip, Typography, useTheme } from "@mui/material";
+import { Grid, Paper, Typography } from "@mui/material";
 import ResourceAvatar from "../Avatar";
 import TableQuery from "@/components/datatable";
 import { formatDate } from "@/helpers/format";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { devolverEmprestimo, getEmprestimos, getEmprestimosPorUser, renovarEmprestimo } from "@/services/emprestimos";
-import Icon from "@/helpers/iconHelper";
-import useAlert from "@/context/alert";
+import { useQuery } from "@tanstack/react-query";
+import { getEmprestimosPorUser } from "@/services/emprestimos";
 
 const TabelaListaEmprestimosPorUser = ({ size = 12, id }) => {
-
     const columnsEmprestimos = [
         {
             field: "id",

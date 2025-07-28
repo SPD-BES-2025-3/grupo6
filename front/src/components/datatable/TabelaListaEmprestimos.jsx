@@ -3,11 +3,11 @@ import ResourceAvatar from "../Avatar";
 import TableQuery from "@/components/datatable";
 import { formatDate } from "@/helpers/format";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { devolverEmprestimo, getEmprestimos, renovarEmprestimo } from "@/services/emprestimos";
+import { devolverEmprestimo, getEmprestimos } from "@/services/emprestimos";
 import Icon from "@/helpers/iconHelper";
 import useAlert from "@/context/alert";
 
-const TabelaListaEmprestimos = ({ size = 12, id }) => {
+const TabelaListaEmprestimos = ({ size = 12 }) => {
     const theme = useTheme();
     const { createModalAsync, createModal, AlertComponent } = useAlert();
     const queryClient = useQueryClient();

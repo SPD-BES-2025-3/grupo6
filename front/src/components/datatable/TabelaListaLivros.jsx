@@ -9,7 +9,6 @@ import EditarLivro from "../buttons/EditarLivro";
 import FazerReserva from "../buttons/FazerReserva";
 
 const TabelaListaLivros = ({ permissao = false, size = 12 }) => {
-    console.log(permissao);
     const theme = useTheme();
     const queryClient = useQueryClient();
 
@@ -27,7 +26,7 @@ const TabelaListaLivros = ({ permissao = false, size = 12 }) => {
     });
 
     const handleRemove = async (id) => {
-        const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo apagar este livro?" });
+        const { isConfirmed } = await createModalAsync("warning", { title: "Remover", html: "Deseja mesmo apagar este livro?" });
         if (!!isConfirmed) {
             try {
                 const response = await deletarLivro(id);

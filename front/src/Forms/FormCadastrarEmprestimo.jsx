@@ -1,4 +1,4 @@
-import { getExemplares, getLivros } from "@/services/livros";
+import { getExemplares } from "@/services/livros";
 import { getReservas } from "@/services/reservas";
 import { getUsuarios } from "@/services/usuarios";
 import { Grid, Typography } from "@mui/material";
@@ -9,11 +9,6 @@ import { RadioButtonGroup, SelectElement, TextareaAutosizeElement, useWatch } fr
 const FormCadastrarEmprestimo = ({ data }) => {
     const idUser = useWatch("idUsuario");
     const temReserva = useWatch("tem_reserva");
-
-    useEffect(() => {
-        console.log(!!idUser.idUsuario && !!temReserva.tem_reserva == "S");
-        console.log(idUser.idUsuario, temReserva.tem_reserva);
-    }, [temReserva, idUser]);
 
     const [userOptions, setUserOptions] = useState([]);
     const [reservasOption, setReservasOption] = useState([]);

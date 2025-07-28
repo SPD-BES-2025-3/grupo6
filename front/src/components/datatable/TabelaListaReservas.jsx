@@ -27,7 +27,7 @@ const TabelaListaReservas = ({ size = 12 }) => {
     });
 
     const handleRemove = async (id) => {
-        const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo cancelar esta reserva?" });
+        const { isConfirmed } = await createModalAsync("warning", { title: "Cancelar", html: "Deseja mesmo cancelar esta reserva?" });
         if (!!isConfirmed) {
             try {
                 const response = await cancelaReserva(id);

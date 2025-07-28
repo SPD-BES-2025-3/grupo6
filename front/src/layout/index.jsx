@@ -3,7 +3,7 @@ import { CircularProgress, Grid } from "@mui/material";
 import Login from "./Auth";
 import { UserAuth } from "@/context/auth";
 
-const Layout = ({ children, title }) => {
+const Layout = ({ children }) => {
     const { user, showSplash, animation, setAnimation } = UserAuth();
 
     React.useEffect(() => {

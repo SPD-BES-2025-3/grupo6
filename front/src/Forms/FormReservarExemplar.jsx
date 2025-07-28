@@ -1,13 +1,11 @@
-import { getExemplaresPorLivro, getLivros } from "@/services/livros";
+import { getExemplaresPorLivro } from "@/services/livros";
 import { Grid } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { SelectElement, TextareaAutosizeElement, useFormContext } from "react-hook-form-mui";
+import { SelectElement, TextareaAutosizeElement } from "react-hook-form-mui";
 import { DatePickerElement } from "react-hook-form-mui/date-pickers";
 
 const FormReservarExemplar = ({ idLivro, nomeLivro }) => {
-    const { setValue } = useFormContext();
-
     const [livrosOptions, setLivrosOptions] = useState([]);
     const exemplaresData = useQuery({
         queryKey: ["get-exemplares-livro"],
@@ -29,19 +27,6 @@ const FormReservarExemplar = ({ idLivro, nomeLivro }) => {
             setLivrosOptions(opts);
         }
     }, [exemplaresData.data]);
-
-    // useEffect(() => {
-    //     if (data && livrosOptions.length > 0) {
-    //         setTimeout(() => {
-    //             setValue("disponibilidade", data.disponibilidade);
-    //             setValue("conservacao", data.conservacao);
-    //             setValue("numeroEdicao", data.numeroEdicao);
-    //             setValue("idLivro", data.livroId);
-    //             setValue("codigoIdentificacao", data.codigoIdentificacao);
-    //             setValue("id", data.id);
-    //         }, 100);
-    //     }
-    // }, [data, livrosOptions, setValue]);
 
     return (
         <Grid container spacing={2} pt={2}>

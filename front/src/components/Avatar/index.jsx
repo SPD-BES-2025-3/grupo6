@@ -1,6 +1,7 @@
 import React from "react";
 import { Avatar, useTheme } from "@mui/material";
 import Icon from "@/helpers/iconHelper";
+
 export default function ResourceAvatar({ recurso, size = 25, sx, color }) {
     const theme = useTheme();
     const backgroundMap = {

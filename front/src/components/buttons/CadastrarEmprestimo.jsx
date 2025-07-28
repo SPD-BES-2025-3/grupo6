@@ -8,7 +8,6 @@ import Icon from "@/helpers/iconHelper";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useAlert from "@/context/alert";
-import FormCadastrarLivro from "@/Forms/FormCadastrarLivro";
 import { useQueryClient } from "@tanstack/react-query";
 import { cadastraEmprestimo } from "@/services/emprestimos";
 import FormCadastrarEmprestimo from "@/Forms/FormCadastrarEmprestimo";
@@ -23,21 +22,17 @@ const CloseButton = React.memo(function CloseButton({ onClose }) {
 
 const schema = yup.object().shape({
     idUsuario: yup.string().required("Campo obrigatório"),
-
     tem_reserva: yup.string().oneOf(["S", "N"], "Valor inválido").required("Campo obrigatório"),
-
     idReserva: yup.string().when("tem_reserva", {
         is: (val) => val === "S",
         then: (schema) => schema.required("Campo obrigatório"),
         otherwise: (schema) => schema.notRequired(),
     }),
-
     idExemplar: yup.string().when("tem_reserva", {
         is: (val) => val === "N",
         then: (schema) => schema.required("Campo obrigatório"),
         otherwise: (schema) => schema.notRequired(),
     }),
-
 });
 const CadastrarEmprestimo = () => {
     const { createModalAsync, createModal, AlertComponent } = useAlert();
@@ -49,10 +44,9 @@ const CadastrarEmprestimo = () => {
     const handleClose = React.useCallback(() => setOpen(false), []);
 
     const handleSubmit = async (data) => {
-        const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo realizar este empréstimo?" });
+        const { isConfirmed } = await createModalAsync("warning", { title: "Realizar empréstimo", html: "Deseja mesmo realizar este empréstimo?" });
         if (!!isConfirmed) {
             try {
-                console.log(data);
                 const response = await cadastraEmprestimo(data);
                 if (response.status === 201) {
                     createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Empréstimo realizado com sucesso!</p> });

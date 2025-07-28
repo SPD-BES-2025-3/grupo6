@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { SelectElement, TextFieldElement, useFormContext } from "react-hook-form-mui";
 
 const FormCadastrarExemplar = ({ data }) => {
-    const { reset, setValue } = useFormContext();
+    const { setValue } = useFormContext();
 
     const [livrosOptions, setLivrosOptions] = useState([]);
     const livrosData = useQuery({
