@@ -1,43 +1,26 @@
 package br.com.ufg.odm.config;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.io.IOException;
+import java.util.Arrays;
 
 @Configuration
-@Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsConfig {
 
     @Bean
-    public Filter corsFilter() {
-        return new GenericFilterBean() {
-            @Override
-            public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-                    throws IOException, ServletException {
-                HttpServletRequest httpRequest = (HttpServletRequest) request;
-                HttpServletResponse httpResponse = (HttpServletResponse) response;
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
+        configuration.setAllowCredentials(true); // Allow sending cookies/authorization headers
 
-                httpResponse.setHeader("Access-Control-Allow-Origin", "*");
-                httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-                httpResponse.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, X-Requested-With");
-                httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
-                httpResponse.setHeader("Access-Control-Max-Age", "3600");
-
-                // Handle preflight requests
-                if ("OPTIONS".equalsIgnoreCase(httpRequest.getMethod())) {
-                    httpResponse.setStatus(HttpServletResponse.SC_OK);
-                    return;
-                }
-
-                chain.doFilter(request, response);
-            }
-        };
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Apply to all paths
+        return source;
     }
 }
