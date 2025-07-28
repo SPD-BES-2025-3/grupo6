@@ -6,26 +6,73 @@ services:
       POSTGRES_DB: spd_orm
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-    ports:
-      - "5454:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./orm/init-scripts:/docker-entrypoint-initdb.d
     restart: unless-stopped
+
+  mongodb:
+    image: mongodb/mongodb-community-server:latest
+    container_name: mongodb-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+      MONGO_INITDB_DATABASE: spd_odm
+    volumes:
+      - mongodb_data:/data/db
+    restart: unless-stopped
+
+  redis:
+    image: redis:latest
+    container_name: redis-cache
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      TZ: America/Sao_Paulo
+    restart: unless-stopped
+
   spring-orm:
     build:
       context: ./orm
       dockerfile: Dockerfile
     container_name: spring-orm-api
-    ports:
-      - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/spd_orm
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
+      SERVER_PORT: 8081
       TZ: America/Sao_Paulo
     depends_on:
       - postgres
+      - redis
+      - api-gateway
     restart: unless-stopped
+
+  spring-odm:
+    build:
+      context: ./odm
+      dockerfile: Dockerfile
+    container_name: spring-odm-api
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:mongo@mongodb:27017/spd_odm
+      TZ: America/Sao_Paulo
+      SERVER_PORT: 8082
+    depends_on:
+      - mongodb
+      - redis
+      - api-gateway
+    restart: unless-stopped
+
 volumes:
   postgres_data:
+  mongodb_data:
+  redis_data:

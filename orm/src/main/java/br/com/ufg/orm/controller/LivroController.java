@@ -1,13 +1,15 @@
 package br.com.ufg.orm.controller;
 
+import br.com.ufg.orm.dataSync.DataSyncPublisher;
+import br.com.ufg.orm.dataSync.EntityType;
+import br.com.ufg.orm.dto.ExemplarResponseDto;
 import br.com.ufg.orm.dto.IncluirLIvroRequestDto;
 import br.com.ufg.orm.dto.LivroResponseDto;
-import br.com.ufg.orm.dto.ExemplarResponseDto;
-import br.com.ufg.orm.model.Livro;
-import br.com.ufg.orm.model.Exemplar;
-import br.com.ufg.orm.repository.LivroRepository;
-import br.com.ufg.orm.repository.ExemplarRepository;
 import br.com.ufg.orm.enums.Disponibilidade;
+import br.com.ufg.orm.model.Exemplar;
+import br.com.ufg.orm.model.Livro;
+import br.com.ufg.orm.repository.ExemplarRepository;
+import br.com.ufg.orm.repository.LivroRepository;
 import br.com.ufg.orm.useCase.livro.AlterarLivro;
 import br.com.ufg.orm.useCase.livro.ExcluirLivro;
 import br.com.ufg.orm.useCase.livro.IncluirLivro;
@@ -36,6 +38,7 @@ public class LivroController {
     private final ExemplarRepository exemplarRepository;
     private final AlterarLivro alterarLivro;
     private final ExcluirLivro excluirLivro;
+    private final DataSyncPublisher dataSyncPublisher;
 
     @Transactional(readOnly = true)
     @GetMapping
@@ -79,6 +82,7 @@ public class LivroController {
             @Parameter(description = "Dados do livro a ser criado", required = true)
             @RequestBody IncluirLIvroRequestDto requestDto){
         Livro livroSalvo = incluirLivro.executar(requestDto.toLivro());
+        dataSyncPublisher.publishCreateEvent(EntityType.LIVRO, livroSalvo.getId(), livroSalvo);
         return ResponseEntity.ok(LivroResponseDto.from(livroSalvo));
     }
 

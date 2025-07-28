@@ -22,6 +22,13 @@ public class DevolverEmprestimo implements UseCase<Emprestimo, Emprestimo> {
     @Transactional
     @Override
     public Emprestimo executar(Emprestimo emprestimo) {
+        if (emprestimo == null || emprestimo.getId() == null) {
+            throw new NegocioException("O empréstimo não pode ser nulo ou sem ID.");
+        }
+
+        emprestimo = emprestimoRepository.findById(emprestimo.getId())
+                .orElseThrow(() -> new NegocioException("Empréstimo não encontrado."));
+
         validar(emprestimo);
 
         emprestimo.setDataDevolucao(LocalDateTime.now());
@@ -34,15 +41,12 @@ public class DevolverEmprestimo implements UseCase<Emprestimo, Emprestimo> {
 
     @Override
     public void validar(Emprestimo emprestimo) {
-        if (emprestimo == null || emprestimo.getId() == null) {
-            throw new NegocioException("O empréstimo não pode ser nulo ou sem ID.");
-        }
-
-        emprestimo = emprestimoRepository.findById(emprestimo.getId())
-                .orElseThrow(() -> new NegocioException("Empréstimo não encontrado."));
-
         if (emprestimo.getStatus().equals(StatusEmprestimo.DEVOLVIDO) || emprestimo.getDataDevolucao() != null) {
             throw new NegocioException("O empréstimo já foi devolvido.");
+        }
+
+        if (emprestimo.getExemplar() == null || emprestimo.getExemplar().getId() == null) {
+            throw new NegocioException("O exemplar do empréstimo não pode ser nulo ou sem ID.");
         }
     }
 }
