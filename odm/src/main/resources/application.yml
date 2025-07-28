@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: odm
+  data:
+    mongodb:
+      host: mongodb
+      port: 27017
+      database: biblioteca
+    redis:
+      host: redis
+      port: 6379
+      timeout: 2000ms
+
+server:
+  servlet:
+    context-path: /public
+  port: 8082

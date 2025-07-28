@@ -9,6 +9,11 @@ spring:
     url: jdbc:postgresql://localhost:5432/spd_orm
     username: postgres
     password: postgres
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000ms
 
 # Configurações do SpringDoc OpenAPI (Swagger)
 springdoc:
@@ -29,6 +34,6 @@ springdoc:
   show-actuator: false
 
 server:
+  port: 8081
   servlet:
     context-path: /api
-  port: 8080

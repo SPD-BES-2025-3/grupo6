@@ -7,5 +7,5 @@ RUN mvn clean package -DskipTests
 FROM gcr.io/distroless/java21
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
-EXPOSE 8081
+EXPOSE 8082
 CMD ["app.jar"]
