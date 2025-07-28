@@ -16,6 +16,6 @@ spring:
               predicates:
                   - Path=/public/**
               filters:
-                  - StripPrefix=1
+                  - StripPrefix=0
   application:
     name: api-gateway
