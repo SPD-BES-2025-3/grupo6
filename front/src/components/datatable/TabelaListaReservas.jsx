@@ -113,7 +113,7 @@ const TabelaListaReservas = ({ size = 12 }) => {
             renderCell: (cellValues) => {
                 return (
                     <>
-                        {cellValues.row.statusReserva !== "CANCELADA" && (
+                        {cellValues.row.statusReserva === "ATIVA" && (
                             <Grid display="flex" justifyContent="center" alignItems="center" sx={{ width: "100%" }}>
                                 <Tooltip title={"Cancelar"} placement="top" disableInteractive>
                                     <IconButton
