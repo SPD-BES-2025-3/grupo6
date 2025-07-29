@@ -13,7 +13,7 @@ public class DataSyncHandler {
     private final ObjectMapper objectMapper;
     private final EntitySyncService entitySyncService;
 
-    public void handleSyncEvent(EntityType entityType, OperationType operation, Long entityId, String dataJson) {
+    public void handleSyncEvent(EntityType entityType, OperationType operation, Long entityId, String dataJson) throws Exception {
         try {
             log.info("Processando evento: {} - {} - ID: {}", entityType, operation, entityId);
 
@@ -33,22 +33,23 @@ public class DataSyncHandler {
 
         } catch (Exception e) {
             log.error("Erro ao processar evento de sincronização para {} - {}", entityType, operation, e);
+            throw e;
         }
     }
 
-    private void handleCreateEvent(EntityType entityType, Long entityId, String dataJson) {
+    private void handleCreateEvent(EntityType entityType, Long entityId, String dataJson) throws Exception {
         if (dataJson != null) {
             entitySyncService.createEntity(entityType, entityId, dataJson);
         }
     }
 
-    private void handleUpdateEvent(EntityType entityType, Long entityId, String dataJson) {
+    private void handleUpdateEvent(EntityType entityType, Long entityId, String dataJson) throws Exception {
         if (dataJson != null) {
             entitySyncService.updateEntity(entityType, entityId, dataJson);
         }
     }
 
-    private void handleDeleteEvent(EntityType entityType, Long entityId) {
+    private void handleDeleteEvent(EntityType entityType, Long entityId) throws Exception {
         entitySyncService.deleteEntity(entityType, entityId);
     }
 }

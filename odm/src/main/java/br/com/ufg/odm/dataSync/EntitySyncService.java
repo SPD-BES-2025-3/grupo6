@@ -28,52 +28,58 @@ public class EntitySyncService {
         EntityType.EMPRESTIMO, "emprestimos"
     );
 
-    public void createEntity(EntityType entityType, Long entityId, String dataJson) {
+    public void createEntity(EntityType entityType, Long entityId, String dataJson) throws Exception {
         try {
             String collectionName = getCollectionName(entityType);
             Map<String, Object> document = parseJsonToDocument(dataJson);
-            document.put("_id", entityId);
 
             mongoTemplate.save(document, collectionName);
             log.info("Entidade criada no MongoDB: {} - ID: {}", entityType, entityId);
 
         } catch (Exception e) {
             log.error("Erro ao criar entidade {} - ID: {}", entityType, entityId, e);
+            throw e;
         }
     }
 
-    public void updateEntity(EntityType entityType, Long entityId, String dataJson) {
+    public void updateEntity(EntityType entityType, Long entityId, String dataJson) throws Exception {
         try {
             String collectionName = getCollectionName(entityType);
             Map<String, Object> document = parseJsonToDocument(dataJson);
-            document.put("_id", entityId);
 
-            Query query = new Query(Criteria.where("_id").is(entityId));
+            // Busca pela entidade usando o idOrm (que é o entityId recebido)
+            Query query = new Query(Criteria.where("idOrm").is(entityId));
 
             if (mongoTemplate.exists(query, collectionName)) {
+                // Mantém o _id existente e atualiza os demais campos
+                Object existingId = mongoTemplate.findOne(query, Map.class, collectionName).get("_id");
+                document.put("_id", existingId);
                 mongoTemplate.save(document, collectionName);
-                log.info("Entidade atualizada no MongoDB: {} - ID: {}", entityType, entityId);
+                log.info("Entidade atualizada no MongoDB: {} - idOrm: {}", entityType, entityId);
             } else {
-                // Se não existe, cria
+                // Se não existe, cria com o idOrm como _id também
                 mongoTemplate.save(document, collectionName);
-                log.info("Entidade criada no MongoDB (não existia): {} - ID: {}", entityType, entityId);
+                log.info("Entidade criada no MongoDB (não existia): {} - idOrm: {}", entityType, entityId);
             }
 
         } catch (Exception e) {
-            log.error("Erro ao atualizar entidade {} - ID: {}", entityType, entityId, e);
+            log.error("Erro ao atualizar entidade {} - idOrm: {}", entityType, entityId, e);
+            throw e;
         }
     }
 
-    public void deleteEntity(EntityType entityType, Long entityId) {
+    public void deleteEntity(EntityType entityType, Long entityId) throws Exception{
         try {
             String collectionName = getCollectionName(entityType);
-            Query query = new Query(Criteria.where("_id").is(entityId));
+            // Busca pela entidade usando o idOrm (que é o entityId recebido)
+            Query query = new Query(Criteria.where("idOrm").is(entityId));
 
             mongoTemplate.remove(query, collectionName);
-            log.info("Entidade removida do MongoDB: {} - ID: {}", entityType, entityId);
+            log.info("Entidade removida do MongoDB: {} - idOrm: {}", entityType, entityId);
 
         } catch (Exception e) {
-            log.error("Erro ao remover entidade {} - ID: {}", entityType, entityId, e);
+            log.error("Erro ao remover entidade {} - idOrm: {}", entityType, entityId, e);
+            throw e;
         }
     }
 

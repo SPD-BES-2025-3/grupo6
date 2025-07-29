@@ -5,14 +5,14 @@ spring:
         webmvc:
           routes:
             - id: api-administrativa
-              uri: http://spring-orm:8081
+              uri: ${SPRING_ORM_SERVICE_URL:http://localhost:8081}
               predicates:
                 - Path=/api/**
               filters:
                 - StripPrefix=0
 
             - id: api-publica
-              uri: http://spring-odm:8082
+              uri: ${SPRING_ODM_SERVICE_URL:http://localhost:8082}
               predicates:
                   - Path=/public/**
               filters:

@@ -1,6 +1,9 @@
 package br.com.ufg.orm.controller;
 
+import br.com.ufg.orm.dataSync.DataSyncPublisher;
+import br.com.ufg.orm.dataSync.EntityType;
 import br.com.ufg.orm.dto.AlterarExemplarRequestDto;
+import br.com.ufg.orm.dto.ExemplarPublisherDto;
 import br.com.ufg.orm.dto.ExemplarResponseDto;
 import br.com.ufg.orm.dto.IncluirExemplarRequestDto;
 import br.com.ufg.orm.model.Exemplar;
@@ -32,6 +35,7 @@ public class ExemplarController {
     private final ExemplarRepository exemplarRepository;
     private final AlterarExemplar alterarExemplar;
     private final ExcluirExemplar excluirExemplar;
+    private final DataSyncPublisher dataSyncPublisher;
 
     @Transactional(readOnly = true)
     @GetMapping
@@ -89,6 +93,7 @@ public class ExemplarController {
             @Parameter(description = "Dados do exemplar a ser criado", required = true)
             @RequestBody IncluirExemplarRequestDto requestDto) {
         Exemplar exemplarSalvo = incluirExemplar.executar(requestDto.toExemplar());
+        dataSyncPublisher.publishCreateEvent(EntityType.EXEMPLAR, exemplarSalvo.getId(), ExemplarPublisherDto.from(exemplarSalvo));
         return ResponseEntity.ok(ExemplarResponseDto.from(exemplarSalvo));
     }
 
@@ -108,6 +113,7 @@ public class ExemplarController {
             return ResponseEntity.notFound().build();
         }
         Exemplar exemplarAtualizado = alterarExemplar.executar(requestDto.toExemplar());
+        dataSyncPublisher.publishUpdateEvent(EntityType.EXEMPLAR, exemplarAtualizado.getId(), ExemplarPublisherDto.from(exemplarAtualizado));
         return ResponseEntity.ok(ExemplarResponseDto.from(exemplarAtualizado));
     }
 
@@ -125,6 +131,7 @@ public class ExemplarController {
             return ResponseEntity.notFound().build();
         }
         excluirExemplar.executar(id);
+        dataSyncPublisher.publishDeleteEvent(EntityType.EXEMPLAR, id);
         return ResponseEntity.noContent().build();
     }
 }

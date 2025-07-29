@@ -1,5 +1,8 @@
 package br.com.ufg.orm.controller;
 
+import br.com.ufg.orm.dataSync.DataSyncPublisher;
+import br.com.ufg.orm.dataSync.EntityType;
+import br.com.ufg.orm.dto.EmprestimoPublisherDto;
 import br.com.ufg.orm.dto.EmprestimoResponseDto;
 import br.com.ufg.orm.dto.RealizarEmprestimoRequestDto;
 import br.com.ufg.orm.enums.StatusEmprestimo;
@@ -34,6 +37,7 @@ public class EmprestimoController {
     private final DevolverEmprestimo devolverEmprestimo;
     private final RenovarEmprestimo renovarEmprestimo;
     private final EmprestimoRepository emprestimoRepository;
+    private final DataSyncPublisher dataSyncPublisher;
 
     @PreAuthorize("principal.podeManipularEmprestimos()")
     @PostMapping
@@ -50,9 +54,9 @@ public class EmprestimoController {
     public ResponseEntity<EmprestimoResponseDto> realizarEmprestimo(
             @Parameter(description = "Dados do empréstimo a ser realizado", required = true)
             @RequestBody RealizarEmprestimoRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(EmprestimoResponseDto.from(
-                realizarEmprestimo.executar(requestDto.toEmprestimo())
-        ));
+        Emprestimo emprestimoRealizado = realizarEmprestimo.executar(requestDto.toEmprestimo());
+        dataSyncPublisher.publishCreateEvent(EntityType.EMPRESTIMO, emprestimoRealizado.getId(), EmprestimoPublisherDto.from(emprestimoRealizado));
+        return ResponseEntity.status(HttpStatus.CREATED).body(EmprestimoResponseDto.from(emprestimoRealizado));
     }
 
     @PreAuthorize("principal.podeManipularEmprestimos()")
@@ -68,9 +72,9 @@ public class EmprestimoController {
     public ResponseEntity<EmprestimoResponseDto> devolverEmprestimo(
             @Parameter(description = "ID do empréstimo a ser devolvido", required = true)
             @PathVariable Long id) {
-        return ResponseEntity.ok(EmprestimoResponseDto.from(
-                devolverEmprestimo.executar(Emprestimo.builder().id(id).build())
-        ));
+        Emprestimo emprestimoDevolvido = devolverEmprestimo.executar(Emprestimo.builder().id(id).build());
+        dataSyncPublisher.publishUpdateEvent(EntityType.EMPRESTIMO, emprestimoDevolvido.getId(), EmprestimoPublisherDto.from(emprestimoDevolvido));
+        return ResponseEntity.ok(EmprestimoResponseDto.from(emprestimoDevolvido));
     }
 
     @PreAuthorize("principal.podeManipularEmprestimos()")
@@ -87,9 +91,9 @@ public class EmprestimoController {
     public ResponseEntity<EmprestimoResponseDto> renovarEmprestimo(
             @Parameter(description = "ID do empréstimo a ser renovado", required = true)
             @PathVariable Long id) {
-        return ResponseEntity.ok(EmprestimoResponseDto.from(
-                renovarEmprestimo.executar(Emprestimo.builder().id(id).build())
-        ));
+        Emprestimo emprestimoRenovado = renovarEmprestimo.executar(Emprestimo.builder().id(id).build());
+        dataSyncPublisher.publishUpdateEvent(EntityType.EMPRESTIMO, emprestimoRenovado.getId(), EmprestimoPublisherDto.from(emprestimoRenovado));
+        return ResponseEntity.ok(EmprestimoResponseDto.from(emprestimoRenovado));
     }
 
     @GetMapping

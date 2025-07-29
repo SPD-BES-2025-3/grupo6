@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,9 +21,9 @@ public class Emprestimo {
     private Long idOrm;
     private String nomeUsuario;
     private String idOrmExemplar;
-    private String dataEmprestimo;
-    private String dataDevolucaoPrevista;
-    private String dataDevolucao;
+    private LocalDateTime dataEmprestimo;
+    private LocalDateTime dataPrevistaDevolucao;
+    private LocalDateTime dataDevolucao;
     private StatusEmprestimo status;
     private Integer renovacoes;
 }

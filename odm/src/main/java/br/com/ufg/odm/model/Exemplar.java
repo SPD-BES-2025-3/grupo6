@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -21,10 +20,7 @@ public class Exemplar {
     @Id
     private String id;
     private Long idOrm;
-
-    @DBRef
-    private Livro livro;
-
+    private Long idLivroOrm;
     private String codigoIdentificacao;
     private Conservacao conservacao;
     private Integer numeroEdicao;

@@ -4,6 +4,7 @@ import br.com.ufg.orm.dataSync.DataSyncPublisher;
 import br.com.ufg.orm.dataSync.EntityType;
 import br.com.ufg.orm.dto.ExemplarResponseDto;
 import br.com.ufg.orm.dto.IncluirLIvroRequestDto;
+import br.com.ufg.orm.dto.LivroPublisherDto;
 import br.com.ufg.orm.dto.LivroResponseDto;
 import br.com.ufg.orm.enums.Disponibilidade;
 import br.com.ufg.orm.model.Exemplar;
@@ -82,7 +83,7 @@ public class LivroController {
             @Parameter(description = "Dados do livro a ser criado", required = true)
             @RequestBody IncluirLIvroRequestDto requestDto){
         Livro livroSalvo = incluirLivro.executar(requestDto.toLivro());
-        dataSyncPublisher.publishCreateEvent(EntityType.LIVRO, livroSalvo.getId(), livroSalvo);
+        dataSyncPublisher.publishCreateEvent(EntityType.LIVRO, livroSalvo.getId(), LivroPublisherDto.from(livroSalvo));
         return ResponseEntity.ok(LivroResponseDto.from(livroSalvo));
     }
 
@@ -102,6 +103,7 @@ public class LivroController {
             return ResponseEntity.notFound().build();
         }
         Livro livroAtualizado = alterarLivro.executar(requestDto.toLivro());
+        dataSyncPublisher.publishUpdateEvent(EntityType.LIVRO, livroAtualizado.getId(), LivroPublisherDto.from(livroAtualizado));
         return ResponseEntity.ok(LivroResponseDto.from(livroAtualizado));
     }
 
@@ -119,6 +121,7 @@ public class LivroController {
             return ResponseEntity.notFound().build();
         }
         excluirLivro.executar(id);
+        dataSyncPublisher.publishDeleteEvent(EntityType.LIVRO, id);
         return ResponseEntity.noContent().build();
     }
 
