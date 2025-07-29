@@ -22,12 +22,6 @@ a {
     text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-    html {
-        color-scheme: dark;
-    }
-}
-
 ::-webkit-scrollbar {
     height: 0.4rem;
     width: 0.3rem;
@@ -39,31 +33,4 @@ a {
     border-color: rgba(255, 255, 255, var(--tw-border-opacity));
     border-radius: 9999px;
     border-width: 1px;
-}
-
-.print-only {
-    display: none !important;
-}
-
-@media print {
-    .print-only {
-        display: block !important;
-        min-width: 1000px;
-    }
-    .no-print {
-        display: none;
-    }
-}
-
-header {
-    display: flex;
-    position: relative;
-}
-
-
-
-
-.disabled {
-    pointer-events: none;
-    opacity: 0.5;
 }

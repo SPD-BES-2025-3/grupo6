@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { FormContainer } from "react-hook-form-mui";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip, useTheme } from "@mui/material";
@@ -39,10 +39,10 @@ const FazerReserva = ({ idLivro, nomeLivro }) => {
     const handleClose = React.useCallback(() => setOpen(false), []);
 
     const handleSubmit = async (data) => {
-        const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo reservar este exemplar?" });
+        const { isConfirmed } = await createModalAsync("warning", { title: "Reservar", html: "Deseja mesmo reservar este exemplar?" });
         if (!!isConfirmed) {
             try {
-                const payload = {...data, dataReserva: new Date()}
+                const payload = { ...data, dataReserva: new Date() };
                 const response = await cadastraReserva(payload);
                 if (response.status === 200) {
                     createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Exemplar reservado com sucesso!</p> });

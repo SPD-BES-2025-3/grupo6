@@ -27,7 +27,7 @@ const TabelaListaReservas = ({ size = 12 }) => {
     });
 
     const handleRemove = async (id) => {
-        const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo cancelar esta reserva?" });
+        const { isConfirmed } = await createModalAsync("warning", { title: "Cancelar", html: "Deseja mesmo cancelar esta reserva?" });
         if (!!isConfirmed) {
             try {
                 const response = await cancelaReserva(id);
@@ -113,7 +113,7 @@ const TabelaListaReservas = ({ size = 12 }) => {
             renderCell: (cellValues) => {
                 return (
                     <>
-                        {cellValues.row.statusReserva !== "CANCELADA" && (
+                        {cellValues.row.statusReserva === "ATIVA" && (
                             <Grid display="flex" justifyContent="center" alignItems="center" sx={{ width: "100%" }}>
                                 <Tooltip title={"Cancelar"} placement="top" disableInteractive>
                                     <IconButton

@@ -26,7 +26,7 @@ const TabelaListaExemplares = ({ permissao = false, size = 12 }) => {
     });
 
     const handleRemove = async (id) => {
-        const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo apagar este exemplar?" });
+        const { isConfirmed } = await createModalAsync("warning", { title: "Remover", html: "Deseja mesmo apagar este exemplar?" });
         if (!!isConfirmed) {
             try {
                 const response = await deletarExemplar(id);
@@ -57,21 +57,21 @@ const TabelaListaExemplares = ({ permissao = false, size = 12 }) => {
             headerName: "Código de identificação",
             flex: 1,
         },
-        // {
-        //     field: "livroId",
-        //     headerName: "Código do livro",
-        //     flex: 1,
-        // },
-        // {
-        //     field: "livroNome",
-        //     headerName: "Titulo",
-        //     flex: 1,
-        // },
-        // {
-        //     field: "livroAutor",
-        //     headerName: "Autor",
-        //     flex: 1.2,
-        // },
+        {
+            field: "livroId",
+            headerName: "Código do livro",
+            flex: 1,
+        },
+        {
+            field: "livroNome",
+            headerName: "Titulo",
+            flex: 1,
+        },
+        {
+            field: "livroAutor",
+            headerName: "Autor",
+            flex: 1.2,
+        },
         {
             field: "conservacao",
             headerName: "Estado de conservação",

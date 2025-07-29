@@ -1,16 +1,16 @@
 import React from "react";
 
 import { FormContainer } from "react-hook-form-mui";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip, useTheme } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from "@mui/material";
 
 import Icon from "@/helpers/iconHelper";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useAlert from "@/context/alert";
-import { getExemplar, updateExemplar } from "@/services/livros";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import FormCadastrarExemplar from "@/Forms/FormCadastrarExemplar";
+import { useQueryClient } from "@tanstack/react-query";
+import { cadastraEmprestimo } from "@/services/emprestimos";
+import FormCadastrarEmprestimo from "@/Forms/FormCadastrarEmprestimo";
 
 const CloseButton = React.memo(function CloseButton({ onClose }) {
     return (
@@ -21,15 +21,20 @@ const CloseButton = React.memo(function CloseButton({ onClose }) {
 });
 
 const schema = yup.object().shape({
-    idLivro: yup.mixed().required("Campo obrigatório"),
-    conservacao: yup.mixed().required("Campo obrigatório"),
-    numeroEdicao: yup.number().required("Campo obrigatório"),
-    disponibilidade: yup.mixed().required("Campo obrigatório"),
+    idUsuario: yup.string().required("Campo obrigatório"),
+    tem_reserva: yup.string().oneOf(["S", "N"], "Valor inválido").required("Campo obrigatório"),
+    idReserva: yup.string().when("tem_reserva", {
+        is: (val) => val === "S",
+        then: (schema) => schema.required("Campo obrigatório"),
+        otherwise: (schema) => schema.notRequired(),
+    }),
+    idExemplar: yup.string().when("tem_reserva", {
+        is: (val) => val === "N",
+        then: (schema) => schema.required("Campo obrigatório"),
+        otherwise: (schema) => schema.notRequired(),
+    }),
 });
-
-const EditarExemplar = ({ id }) => {
-    const theme = useTheme();
-
+const CadastrarEmprestimo = () => {
     const { createModalAsync, createModal, AlertComponent } = useAlert();
     const queryClient = useQueryClient();
 
@@ -39,16 +44,16 @@ const EditarExemplar = ({ id }) => {
     const handleClose = React.useCallback(() => setOpen(false), []);
 
     const handleSubmit = async (data) => {
-        const { isConfirmed } = await createModalAsync("warning", { title: "Editar", html: "Deseja mesmo editar este exemplar?" });
+        const { isConfirmed } = await createModalAsync("warning", { title: "Realizar empréstimo", html: "Deseja mesmo realizar este empréstimo?" });
         if (!!isConfirmed) {
             try {
-                const response = await updateExemplar(data);
-                if (response.status === 200) {
-                    createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Exemplar editado com sucesso!</p> });
+                const response = await cadastraEmprestimo(data);
+                if (response.status === 201) {
+                    createModal("success", { showConfirmButton: true, html: <p style={{ textAlign: "center" }}>Empréstimo realizado com sucesso!</p> });
                     setOpen(false);
-                    queryClient.invalidateQueries(["get-exemplares", "get-livros"]);
+                    queryClient.invalidateQueries(["get-emprestimos", "get-exemplares", "get-livros"]);
                 } else {
-                    createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao editar o exemplar</p> });
+                    createModal("error", { showConfirmButton: true, title: "Erro", html: <p style={{ textAlign: "center" }}>Ocorreu um erro ao realizar empréstimo</p> });
                 }
             } catch (erro) {
                 createModal("error", {
@@ -56,7 +61,7 @@ const EditarExemplar = ({ id }) => {
                     title: "Erro",
                     html: (
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                            <p style={{ textAlign: "center" }}>Ocorreu um erro ao editar o exemplar</p>
+                            <p style={{ textAlign: "center" }}>Ocorreu um erro ao realizar empréstimo</p>
                             <p style={{ textAlign: "center" }}>{erro?.response?.data?.mensagem}</p>
                         </div>
                     ),
@@ -65,34 +70,20 @@ const EditarExemplar = ({ id }) => {
         }
     };
 
-    const exemplarData = useQuery({
-        queryKey: ["get-exemplar", open],
-        queryFn: async () => {
-            const fetchFunc = getExemplar;
-            if (!!fetchFunc) {
-                const response = await getExemplar(id);
-                return response;
-            }
-        },
-        enabled: !!open,
-    });
-
     return (
         <>
-            <Tooltip title={"Editar Exemplar"} placement="top" disableInteractive>
-                <IconButton onClick={handleOpen}>
-                    <Icon name="Edit" style={{ fill: theme.colors.warning.dark }} />
-                </IconButton>
-            </Tooltip>
+            <Button variant="contained" fullWidth color="success" onClick={handleOpen}>
+                Fazer Empréstimo
+            </Button>
             <Dialog fullWidth maxWidth="sm" open={open} onClose={handleClose}>
                 {open && (
                     <FormContainer onSuccess={(FormData) => handleSubmit(FormData)} resolver={yupResolver(schema)}>
                         <DialogTitle>
-                            Editar Exemplar
+                            Fazer Empréstimo
                             <CloseButton onClose={handleClose} />
                         </DialogTitle>
                         <DialogContent sx={{ m: 2 }}>
-                            <FormCadastrarExemplar data={exemplarData.data} />
+                            <FormCadastrarEmprestimo />
                         </DialogContent>
                         <DialogActions>
                             <Button variant="outlined" color="error" onClick={handleClose} sx={{ mr: 1 }} startIcon={<Icon name="Cancel" />}>
@@ -110,4 +101,4 @@ const EditarExemplar = ({ id }) => {
     );
 };
 
-export default EditarExemplar;
+export default CadastrarEmprestimo;

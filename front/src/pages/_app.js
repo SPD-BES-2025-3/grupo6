@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { CacheProvider } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -20,9 +20,9 @@ const clientSideEmotionCache = createEmotionCache();
 const queryClient = new QueryClient();
 
 export default function MyApp(props) {
-    const { Component, emotionCache = clientSideEmotionCache, session, pageProps } = props;
+    const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
-    const { theme, setTheme, primary, secondary, setPrimary, setSecondary } = useOurTheme();
+    const { theme, primary, secondary } = useOurTheme();
 
     const selectedTheme = useMemo(() => getTheme(theme, [primary, secondary]), [theme, [primary, secondary]]);
 
@@ -37,7 +37,7 @@ export default function MyApp(props) {
                                 <QueryClientProvider client={queryClient}>
                                     <CssBaseline />
                                     <Layout>
-                                            <Component {...pageProps} />
+                                        <Component {...pageProps} />
                                     </Layout>
                                 </QueryClientProvider>
                             </AuthContextProvider>

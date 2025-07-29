@@ -1,6 +1,7 @@
 import React from "react";
 import useLocalStorage from "../localstorage";
 import { jwtDecode } from "jwt-decode";
+import { clearLocalStorageByPrefix } from "@/components/buttons/LogoutButton";
 
 const UserContext = React.createContext();
 

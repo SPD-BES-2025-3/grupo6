@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { FormContainer } from "react-hook-form-mui";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip, useTheme } from "@mui/material";
@@ -39,7 +39,7 @@ const EditarLivro = ({ id }) => {
     const handleClose = React.useCallback(() => setOpen(false), []);
 
     const handleSubmit = async (data) => {
-        const { isConfirmed } = await createModalAsync("warning", { title: "Cadastrar", html: "Deseja mesmo editar este livro?" });
+        const { isConfirmed } = await createModalAsync("warning", { title: "Editar", html: "Deseja mesmo editar este livro?" });
         if (!!isConfirmed) {
             try {
                 const response = await updateLivro(data);
