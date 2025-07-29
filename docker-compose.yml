@@ -83,7 +83,7 @@ services:
       context: ./front
       dockerfile: Dockerfile
       args:
-        - BASE_API_URL=http://localhost:8080/api
+        - BASE_API_URL=http://localhost:8080
     container_name: front-odm
     ports:
     - "4200:3000"
