@@ -15,8 +15,21 @@ public class AlterarLivro implements UseCase<Livro, Livro> {
 
     @Override
     public Livro executar(Livro livro) {
+        if (livro == null || livro.getId() == null) {
+            throw new NegocioException("Livro ou ID do livro não podem ser nulos.");
+        }
+
+        Livro livroExistente = livroRepository.findById(livro.getId())
+                .orElseThrow(() -> new NegocioException("Livro não encontrado com o ID: " + livro.getId()));
+
+        livroExistente.setNome(livro.getNome());
+        livroExistente.setAutor(livro.getAutor());
+        livroExistente.setEditora(livro.getEditora());
+        livroExistente.setAnoLancamento(livro.getAnoLancamento());
+
         validar(livro);
-        return livroRepository.save(livro);
+
+        return livroRepository.save(livroExistente);
     }
 
     @Override

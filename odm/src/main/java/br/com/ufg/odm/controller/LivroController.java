@@ -1,6 +1,5 @@
 package br.com.ufg.odm.controller;
 
-import br.com.ufg.odm.dto.LivroDTO;
 import br.com.ufg.odm.model.Livro;
 import br.com.ufg.odm.repository.LivroRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/livro")
@@ -30,27 +28,11 @@ public class LivroController {
     @Operation(summary = "Listar todos os livros", description = "Retorna uma lista com todos os livros cadastrados no sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de livros retornada com sucesso",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = LivroDTO.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Livro.class))),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<List<LivroDTO>> listarLivros() {
+    public ResponseEntity<List<Livro>> listarLivros() {
         List<Livro> livros = livroRepository.findAll();
-
-        List<LivroDTO> livrosDTO = livros.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(livrosDTO);
-    }
-
-    private LivroDTO convertToDTO(Livro livro) {
-        LivroDTO dto = new LivroDTO();
-        dto.setId(livro.getId());
-        dto.setIdOrm(livro.getIdOrm());
-        dto.setNome(livro.getNome());
-        dto.setAnoLancamento(livro.getAnoLancamento());
-        dto.setAutor(livro.getAutor());
-        dto.setEditora(livro.getEditora());
-        return dto;
+        return ResponseEntity.ok(livros);
     }
 }

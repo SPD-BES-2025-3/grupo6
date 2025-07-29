@@ -1,6 +1,5 @@
 package br.com.ufg.odm.controller;
 
-import br.com.ufg.odm.dto.ReservaDTO;
 import br.com.ufg.odm.model.Reserva;
 import br.com.ufg.odm.repository.ReservaRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,26 +28,11 @@ public class ReservaController {
     @Operation(summary = "Listar todas as reservas", description = "Retorna uma lista com todas as reservas cadastradas no sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de reservas retornada com sucesso",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ReservaDTO.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Reserva.class))),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<List<ReservaDTO>> listarReservas() {
+    public ResponseEntity<List<Reserva>> listarReservas() {
         List<Reserva> reservas = reservaRepository.findAll();
-
-        List<ReservaDTO> reservasDTO = reservas.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(reservasDTO);
-    }
-
-    private ReservaDTO convertToDTO(Reserva reserva) {
-        ReservaDTO dto = new ReservaDTO();
-        dto.setId(reserva.getId());
-        dto.setIdOrm(reserva.getIdOrm());
-        dto.setNomeUsuario(reserva.getNomeUsuario());
-        dto.setIdOrmExemplar(reserva.getIdOrmExemplar());
-        dto.setStatusReserva(reserva.getStatusReserva());
-        return dto;
+        return ResponseEntity.ok(reservas);
     }
 }

@@ -1,6 +1,5 @@
 package br.com.ufg.odm.controller;
 
-import br.com.ufg.odm.dto.ExemplarDTO;
 import br.com.ufg.odm.model.Exemplar;
 import br.com.ufg.odm.repository.ExemplarRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,48 +30,25 @@ public class ExemplarController {
     @Operation(summary = "Listar todos os exemplares", description = "Retorna uma lista com todos os exemplares cadastrados no sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de exemplares retornada com sucesso",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExemplarDTO.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Exemplar.class))),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<List<ExemplarDTO>> listarExemplares() {
+    public ResponseEntity<List<Exemplar>> listarExemplares() {
         List<Exemplar> exemplares = exemplarRepository.findAll();
-
-        List<ExemplarDTO> exemplaresDTO = exemplares.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(exemplaresDTO);
+        return ResponseEntity.ok(exemplares);
     }
 
     @GetMapping("/livro/{livroId}")
     @Operation(summary = "Listar exemplares por livro", description = "Retorna uma lista com todos os exemplares de um livro específico")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de exemplares do livro retornada com sucesso",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExemplarDTO.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Exemplar.class))),
             @ApiResponse(responseCode = "404", description = "Livro não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<List<ExemplarDTO>> listarExemplaresPorLivro(
+    public ResponseEntity<List<Exemplar>> listarExemplaresPorLivro(
             @Parameter(description = "ID do livro", required = true) @PathVariable Long livroId) {
         List<Exemplar> exemplares = exemplarRepository.findByIdLivroOrm(livroId);
-
-        List<ExemplarDTO> exemplaresDTO = exemplares.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(exemplaresDTO);
-    }
-
-    private ExemplarDTO convertToDTO(Exemplar exemplar) {
-        ExemplarDTO dto = new ExemplarDTO();
-        dto.setId(exemplar.getId());
-        dto.setIdOrm(exemplar.getIdOrm());
-        dto.setCodigoIdentificacao(exemplar.getCodigoIdentificacao());
-        dto.setConservacao(exemplar.getConservacao());
-        dto.setNumeroEdicao(exemplar.getNumeroEdicao());
-        dto.setDisponibilidade(exemplar.getDisponibilidade());
-        dto.setDataCriacao(exemplar.getDataCriacao());
-
-        return dto;
+        return ResponseEntity.ok(exemplares);
     }
 }

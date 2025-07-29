@@ -28,7 +28,7 @@ public class EntitySyncService {
         EntityType.EMPRESTIMO, "emprestimos"
     );
 
-    public void createEntity(EntityType entityType, Long entityId, String dataJson) {
+    public void createEntity(EntityType entityType, Long entityId, String dataJson) throws Exception {
         try {
             String collectionName = getCollectionName(entityType);
             Map<String, Object> document = parseJsonToDocument(dataJson);
@@ -38,10 +38,11 @@ public class EntitySyncService {
 
         } catch (Exception e) {
             log.error("Erro ao criar entidade {} - ID: {}", entityType, entityId, e);
+            throw e;
         }
     }
 
-    public void updateEntity(EntityType entityType, Long entityId, String dataJson) {
+    public void updateEntity(EntityType entityType, Long entityId, String dataJson) throws Exception {
         try {
             String collectionName = getCollectionName(entityType);
             Map<String, Object> document = parseJsonToDocument(dataJson);
@@ -63,10 +64,11 @@ public class EntitySyncService {
 
         } catch (Exception e) {
             log.error("Erro ao atualizar entidade {} - idOrm: {}", entityType, entityId, e);
+            throw e;
         }
     }
 
-    public void deleteEntity(EntityType entityType, Long entityId) {
+    public void deleteEntity(EntityType entityType, Long entityId) throws Exception{
         try {
             String collectionName = getCollectionName(entityType);
             // Busca pela entidade usando o idOrm (que é o entityId recebido)
@@ -77,6 +79,7 @@ public class EntitySyncService {
 
         } catch (Exception e) {
             log.error("Erro ao remover entidade {} - idOrm: {}", entityType, entityId, e);
+            throw e;
         }
     }
 

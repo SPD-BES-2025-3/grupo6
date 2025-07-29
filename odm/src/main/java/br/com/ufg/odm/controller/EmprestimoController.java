@@ -1,6 +1,5 @@
 package br.com.ufg.odm.controller;
 
-import br.com.ufg.odm.dto.EmprestimoDTO;
 import br.com.ufg.odm.model.Emprestimo;
 import br.com.ufg.odm.repository.EmprestimoRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,30 +28,11 @@ public class EmprestimoController {
     @Operation(summary = "Listar todos os empréstimos", description = "Retorna uma lista com todos os empréstimos cadastrados no sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de empréstimos retornada com sucesso",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmprestimoDTO.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Emprestimo.class))),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<List<EmprestimoDTO>> listarEmprestimos() {
+    public ResponseEntity<List<Emprestimo>> listarEmprestimos() {
         List<Emprestimo> emprestimos = emprestimoRepository.findAll();
-
-        List<EmprestimoDTO> emprestimosDTO = emprestimos.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(emprestimosDTO);
-    }
-
-    private EmprestimoDTO convertToDTO(Emprestimo emprestimo) {
-        EmprestimoDTO dto = new EmprestimoDTO();
-        dto.setId(emprestimo.getId());
-        dto.setIdOrm(emprestimo.getIdOrm());
-        dto.setNomeUsuario(emprestimo.getNomeUsuario());
-        dto.setIdOrmExemplar(emprestimo.getIdOrmExemplar());
-        dto.setDataEmprestimo(emprestimo.getDataEmprestimo());
-        dto.setDataDevolucaoPrevista(emprestimo.getDataPrevistaDevolucao());
-        dto.setDataDevolucao(emprestimo.getDataDevolucao());
-        dto.setStatus(emprestimo.getStatus());
-        dto.setRenovacoes(emprestimo.getRenovacoes());
-        return dto;
+        return ResponseEntity.ok(emprestimos);
     }
 }
