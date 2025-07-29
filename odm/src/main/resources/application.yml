@@ -3,12 +3,10 @@ spring:
     name: odm
   data:
     mongodb:
-      host: mongodb
-      port: 27017
-      database: spd_odm
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://mongo:mongo@localhost:27017/spd_odm?authSource=admin}
     redis:
-      host: redis
-      port: 6379
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
       timeout: 2000ms
 
 server:
