@@ -9,23 +9,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/reserva")
 @Tag(name = "Reservas", description = "API para gerenciamento de reservas")
 public class ReservaController {
 
-    @Autowired
-    private ReservaRepository reservaRepository;
+    private final ReservaRepository reservaRepository;
 
     @GetMapping
     @Operation(summary = "Listar todas as reservas", description = "Retorna uma lista com todas as reservas cadastradas no sistema")
@@ -35,8 +34,7 @@ public class ReservaController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     public ResponseEntity<List<ReservaDTO>> listarReservas() {
-//        List<Reserva> reservas = reservaRepository.findAll();
-        List<Reserva> reservas = new ArrayList<>();
+        List<Reserva> reservas = reservaRepository.findAll();
 
         List<ReservaDTO> reservasDTO = reservas.stream()
                 .map(this::convertToDTO)

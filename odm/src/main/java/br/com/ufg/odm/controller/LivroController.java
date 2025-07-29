@@ -35,7 +35,6 @@ public class LivroController {
     })
     public ResponseEntity<List<LivroDTO>> listarLivros() {
         List<Livro> livros = livroRepository.findAll();
-//        List<Livro> livros = new ArrayList<>();
 
         List<LivroDTO> livrosDTO = livros.stream()
                 .map(this::convertToDTO)

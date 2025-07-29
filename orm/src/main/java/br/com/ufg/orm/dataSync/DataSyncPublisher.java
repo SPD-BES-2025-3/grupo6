@@ -1,22 +1,21 @@
 package br.com.ufg.orm.dataSync;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class DataSyncPublisher {
 
     private static final String SYNC_CHANNEL = "data-sync-channel";
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     public void publishEvent(EntityType entityType, OperationType operation, Long entityId, Object data) {
         try {

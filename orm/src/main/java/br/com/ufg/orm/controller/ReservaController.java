@@ -1,7 +1,11 @@
 package br.com.ufg.orm.controller;
 
+import br.com.ufg.orm.dataSync.DataSyncPublisher;
+import br.com.ufg.orm.dataSync.EntityType;
+import br.com.ufg.orm.dto.ReservaPublisherDto;
 import br.com.ufg.orm.dto.ReservaRequestDto;
 import br.com.ufg.orm.dto.ReservaResponseDto;
+import br.com.ufg.orm.model.Reserva;
 import br.com.ufg.orm.repository.ReservaRepository;
 import br.com.ufg.orm.useCase.reserva.CancelarReserva;
 import br.com.ufg.orm.useCase.reserva.ReservarExemplar;
@@ -28,6 +32,7 @@ public class ReservaController {
     private final ReservaRepository reservaRepository;
     private final ReservarExemplar reservarExemplar;
     private final CancelarReserva cancelarReserva;
+    private final DataSyncPublisher dataSyncPublisher;
 
     @Transactional(readOnly = true)
     @GetMapping("/{id}")
@@ -74,7 +79,9 @@ public class ReservaController {
     public ResponseEntity<ReservaResponseDto> incluirReserva(
             @Parameter(description = "Dados da reserva a ser criada", required = true)
             @RequestBody ReservaRequestDto requestDto){
-        return ResponseEntity.ok(ReservaResponseDto.from(reservarExemplar.executar(requestDto.toReserva())));
+        Reserva reservaIncluida = reservarExemplar.executar(requestDto.toReserva());
+        dataSyncPublisher.publishCreateEvent(EntityType.RESERVA, reservaIncluida.getId(), ReservaPublisherDto.from(reservaIncluida));
+        return ResponseEntity.ok(ReservaResponseDto.from(reservaIncluida));
     }
 
     @PutMapping("/cancelar/{id}")
@@ -89,7 +96,11 @@ public class ReservaController {
             @Parameter(description = "ID da reserva a ser cancelada", required = true)
             @PathVariable("id") Long id) {
         return reservaRepository.findById(id)
-                .map(reserva -> ResponseEntity.ok(ReservaResponseDto.from(cancelarReserva.executar(reserva))))
+                .map(reserva -> {
+                    Reserva reservaCancelada = cancelarReserva.executar(reserva);
+                    dataSyncPublisher.publishUpdateEvent(EntityType.RESERVA, reservaCancelada.getId(), ReservaPublisherDto.from(reservaCancelada));
+                    return ResponseEntity.ok(ReservaResponseDto.from(reservaCancelada));
+                })
                 .orElse(ResponseEntity.notFound().build());
     }
 }

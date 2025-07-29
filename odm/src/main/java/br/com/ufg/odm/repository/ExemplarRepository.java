@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ExemplarRepository extends MongoRepository<Exemplar, String> {
-    List<Exemplar> findByLivroId(String livroId);
+    List<Exemplar> findByIdLivroOrm(Long idLivroOrm);
 }

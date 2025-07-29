@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,13 +26,13 @@ public class EmprestimoDTO {
     private String idOrmExemplar;
 
     @Schema(description = "Data do empréstimo", example = "2024-01-15")
-    private String dataEmprestimo;
+    private LocalDateTime dataEmprestimo;
 
     @Schema(description = "Data prevista para devolução", example = "2024-01-29")
-    private String dataDevolucaoPrevista;
+    private LocalDateTime dataDevolucaoPrevista;
 
     @Schema(description = "Data da devolução (se já devolvido)", example = "2024-01-28")
-    private String dataDevolucao;
+    private LocalDateTime dataDevolucao;
 
     @Schema(description = "Status atual do empréstimo")
     private StatusEmprestimo status;

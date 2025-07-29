@@ -9,23 +9,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/emprestimo")
 @Tag(name = "Empréstimos", description = "API para gerenciamento de empréstimos")
 public class EmprestimoController {
 
-    @Autowired
-    private EmprestimoRepository emprestimoRepository;
+    private final EmprestimoRepository emprestimoRepository;
 
     @GetMapping
     @Operation(summary = "Listar todos os empréstimos", description = "Retorna uma lista com todos os empréstimos cadastrados no sistema")
@@ -35,8 +34,7 @@ public class EmprestimoController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     public ResponseEntity<List<EmprestimoDTO>> listarEmprestimos() {
-//        List<Emprestimo> emprestimos = emprestimoRepository.findAll();
-        List<Emprestimo> emprestimos = new ArrayList<>();
+        List<Emprestimo> emprestimos = emprestimoRepository.findAll();
 
         List<EmprestimoDTO> emprestimosDTO = emprestimos.stream()
                 .map(this::convertToDTO)
@@ -52,7 +50,7 @@ public class EmprestimoController {
         dto.setNomeUsuario(emprestimo.getNomeUsuario());
         dto.setIdOrmExemplar(emprestimo.getIdOrmExemplar());
         dto.setDataEmprestimo(emprestimo.getDataEmprestimo());
-        dto.setDataDevolucaoPrevista(emprestimo.getDataDevolucaoPrevista());
+        dto.setDataDevolucaoPrevista(emprestimo.getDataPrevistaDevolucao());
         dto.setDataDevolucao(emprestimo.getDataDevolucao());
         dto.setStatus(emprestimo.getStatus());
         dto.setRenovacoes(emprestimo.getRenovacoes());
