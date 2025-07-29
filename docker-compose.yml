@@ -78,6 +78,21 @@ services:
       - api-gateway
     restart: unless-stopped
 
+  front:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+      args:
+        - BASE_API_URL=http://localhost:8080/api
+    container_name: front-odm
+    ports:
+    - "4200:3000"
+    environment:
+      TZ: America/Sao_Paulo
+    restart: unless-stopped
+    depends_on:
+    - spring-orm
+
 volumes:
   postgres_data:
   mongodb_data:
