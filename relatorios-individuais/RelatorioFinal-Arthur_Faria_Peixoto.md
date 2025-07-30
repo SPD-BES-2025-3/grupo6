@@ -8,6 +8,7 @@ Arthur Faria Peixoto \- 201910873
 ## Resumo Executivo
 
 O presente relatório consolida o desenvolvimento do **Sistema de Gestão de Biblioteca** concebido pelo Grupo 6. Nosso objetivo foi criar uma solução desktop híbrida (Next.js + Electron) integrada a uma API RESTful robusta (Spring Boot + PostgreSQL), com vistas a oferecer funcionalidades completas de cadastro, empréstimo, devolução, reserva e visualização pública de acervo.
+Nessa entrega, fiquei por conta de finalizar por total a interface do usuário com todas as regras e peculiaridades, e  no commit `195b8a3 - feat: emprestimo` foi feita toda a logica do empréstimo no backend, o controller, o dto, o cadastro, devolução e renovação do empréstimo assim como testes unitários para diversos casos. 
 
 **Principais vantagens:**
 
