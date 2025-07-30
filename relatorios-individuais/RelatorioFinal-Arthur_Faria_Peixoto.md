@@ -2,7 +2,6 @@
 Arthur Faria Peixoto \- 201910873
 
 **Integrantes:** Álvaro Veloso Lisboa, Arthur Faria Peixoto, Thâmara Cordeiro de Castro
-**Data:** 30 de julho de 2025
 
 ---
 
