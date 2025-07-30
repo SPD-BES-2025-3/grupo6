@@ -72,4 +72,10 @@ const getLivrosPublic = async () => {
     return data;
 };
 
-export { getLivros, cadastraLivro, deletarLivro, updateLivro, getExemplares, cadastraExemplar, deletarExemplar, updateExemplar, getExemplar, getLivro, getExemplaresPorLivro, getLivrosPublic };
+const getExemplarPorLivroPublic = async (id) => {
+    const api = ApiClient();
+    const { data } = await api.get(`/public/exemplar/livro/${id}`);
+    return data;
+};
+
+export { getLivros, cadastraLivro, deletarLivro, updateLivro, getExemplares, cadastraExemplar, deletarExemplar, updateExemplar, getExemplar, getLivro, getExemplaresPorLivro, getLivrosPublic, getExemplarPorLivroPublic };
