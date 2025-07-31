@@ -150,6 +150,58 @@ Redis Pub/Sub + Queue System
 - API Gateway pattern
 - Message queue com fallback
 
+### **Principais Commits do Desenvolvimento**
+
+A evolução do projeto pode ser acompanhada através dos seguintes commits principais:
+
+#### **1. Commit inicial e mapeamento da camada de persistência**
+**Hash:** `2498a608b1303c377bdcedb5d2a60ff4bd07db68`  
+**Link:** [https://github.com/SPD-BES-2025-3/grupo6/commit/2498a608b1303c377bdcedb5d2a60ff4bd07db68](https://github.com/SPD-BES-2025-3/grupo6/commit/2498a608b1303c377bdcedb5d2a60ff4bd07db68)
+- Estabelecimento da estrutura inicial do projeto
+- Mapeamento JPA das entidades principais (Livro, Exemplar, Usuario, Emprestimo, Reserva)
+- Configuração do banco PostgreSQL e dependências base
+- Implementação dos repositórios JPA
+
+#### **2. Endpoints CRUD para Usuario, Livro e Exemplar, habilitando Swagger**
+**Hash:** `82a90f2740c05ca3261425a19e87d1b977595d44`  
+**Link:** [https://github.com/SPD-BES-2025-3/grupo6/commit/82a90f2740c05ca3261425a19e87d1b977595d44](https://github.com/SPD-BES-2025-3/grupo6/commit/82a90f2740c05ca3261425a19e87d1b977595d44)
+- Implementação completa dos controllers REST
+- Operações CRUD para as entidades principais
+- Integração e configuração do Swagger/OpenAPI
+- Padronização de respostas HTTP e tratamento de exceções
+
+#### **3. Implementando autenticação JWT**
+**Hash:** `40604a6426395c3338fff9ec25c99f98a8c7229a`  
+**Link:** [https://github.com/SPD-BES-2025-3/grupo6/commit/40604a6426395c3338fff9ec25c99f98a8c7229a](https://github.com/SPD-BES-2025-3/grupo6/commit/40604a6426395c3338fff9ec25c99f98a8c7229a)
+- Configuração do Spring Security
+- Sistema de autenticação baseado em tokens JWT
+- Endpoints de login e registro
+- Proteção de rotas com autorização baseada em roles
+
+#### **4. Implementando API pública, API Gateway e integração entre as APIs**
+**Hash:** `61f8a31a8b2b50824d659a76223db0102c1f342c`  
+**Link:** [https://github.com/SPD-BES-2025-3/grupo6/commit/61f8a31a8b2b50824d659a76223db0102c1f342c](https://github.com/SPD-BES-2025-3/grupo6/commit/61f8a31a8b2b50824d659a76223db0102c1f342c)
+- Desenvolvimento completo da API ODM com MongoDB
+- Implementação do API Gateway com Spring Cloud Gateway
+- Roteamento inteligente entre APIs ORM e ODM
+- Configuração de CORS e políticas de acesso
+
+#### **5. Finalizada ferramenta de sincronização entre as APIs**
+**Hash:** `3fb577b577e5cd5c024c4051e81df8e04adf11f3`  
+**Link:** [https://github.com/SPD-BES-2025-3/grupo6/commit/3fb577b577e5cd5c024c4051e81df8e04adf11f3](https://github.com/SPD-BES-2025-3/grupo6/commit/3fb577b577e5cd5c024c4051e81df8e04adf11f3)
+- Implementação do sistema Pub/Sub com Redis
+- DataSyncPublisher no projeto ORM
+- DataSyncSubscriber no projeto ODM
+- Sincronização automática de dados entre PostgreSQL e MongoDB
+
+#### **6. Implementando retry para casos de falhas na sincronização**
+**Hash:** `ebcd9b4566c5434369cc4da8884c6ba8f5c93965`  
+**Link:** [https://github.com/SPD-BES-2025-3/grupo6/commit/ebcd9b4566c5434369cc4da8884c6ba8f5c93965](https://github.com/SPD-BES-2025-3/grupo6/commit/ebcd9b4566c5434369cc4da8884c6ba8f5c93965)
+- Sistema robusto de fallback com filas Redis
+- Mecanismo de retry automático para operações falhadas
+- Garantia de ordem sequencial nas operações
+- Monitoramento e recuperação de sincronização
+
 ### **Contribuições para o Projeto**
 
 Esta implementação representa uma evolução significativa da arquitetura inicial, transformando um sistema monolítico em uma solução distribuída moderna. As principais conquistas incluem:
