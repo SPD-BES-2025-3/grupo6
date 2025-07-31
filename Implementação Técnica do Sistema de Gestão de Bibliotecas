@@ -1,0 +1,35 @@
+Penultima versão. 
+
+O que já aconteceu até aqui de forma resumida:
+
+O projeto teve início em 14 de julho de 2025, com a criação do grupo e a definição preliminar das exigências da disciplina. Nos primeiros dias, os integrantes organizaram a equipe e compartilharam seus nomes de usuário no GitHub, enquanto discutiam possíveis temas. Em 15 de julho, surgiu a proposta do desenvolvimento de um Sistema de Gestão de Bibliotecas com funcionalidade de empréstimos, ideia que foi aceita por todos.
+
+Já em 16 de julho, houve uma definição mais clara do escopo com base nas diretrizes do professor, que exigia integração entre banco de dados relacional (ORM/SQL) e orientado a documentos (ODM/NoSQL), além da utilização da arquitetura MVC, interface desktop com JavaFX, camada RESTful com Spring Boot, e um middleware integrador usando Redis.
+
+Nesse momento, as tarefas começaram a ser divididas: enquanto uma parte da equipe ficou responsável pela documentação e modelagem (diagramas de classes, componentes e sequência), outra ficou encarregada do desenvolvimento da interface com React, com posterior empacotamento via Electron para atender à exigência de uma aplicação desktop. O backend foi iniciado com foco na camada ORM utilizando Spring e PostgreSQL, apesar da sugestão inicial de ORMLite e SQLite.
+
+Ao longo dos dias seguintes (17 a 21 de julho), os membros se concentraram em:
+
+Finalizar a primeira versão do diagrama de classes;
+
+Elaborar e revisar a documentação técnica do projeto, incluindo cronograma, plano de trabalho e modelagem;
+
+Implementar as primeiras telas da aplicação (cadastro e listagem de usuários e livros);
+
+Criar os primeiros endpoints da API REST e configurá-los no Docker, com documentação pelo Swagger.
+
+Em 21 de julho, a equipe realizou a entrega da primeira etapa do projeto, que correspondia a 20–30% da solução final. Foram enviados o código, documentação técnica e relatórios individuais, conforme solicitado.
+
+A partir daí, novas funcionalidades passaram a ser implementadas, como:
+
+Cadastro de exemplares, reservas e empréstimos;
+
+Integração entre front e back;
+
+Aprimoramento da documentação com base em livros técnicos e padrões ISO;
+
+Inserção de tags como @requirements para alinhar o código com os requisitos documentais;
+
+Sincronização dos dados com NoSQL (MongoDB) e planejamento da integração futura via Redis.
+
+O projeto continuou em ritmo acelerado até o fim de julho, com foco em completar as camadas restantes, testes unitários, validações de negócio
