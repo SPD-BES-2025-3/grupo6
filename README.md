@@ -32,10 +32,8 @@ A arquitetura é composta por três frentes:
 
 ## ⚙️ Pré-requisitos
 
-* **Node.js** v18+ e **npm**
-* **Java** 21
-* **Maven** 3.8+
-* **Docker**
+* **Git**
+* **Docker** e **Docker compose**
 
 ---
 
@@ -45,7 +43,7 @@ A arquitetura é composta por três frentes:
 
 
 ```bash
-docker-compose up --build -d
+docker compose up --build -d
 ```
 
 > O `docker-compose.yml` já define os serviços:
