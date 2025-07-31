@@ -5,10 +5,22 @@ Arthur Faria Peixoto \- 201910873
 
 ---
 
-## Resumo Executivo
+## Resumo
 
 O presente relatório consolida o desenvolvimento do **Sistema de Gestão de Biblioteca** concebido pelo Grupo 6. Nosso objetivo foi criar uma solução desktop híbrida (Next.js + Electron) integrada a uma API RESTful robusta (Spring Boot + PostgreSQL), com vistas a oferecer funcionalidades completas de cadastro, empréstimo, devolução, reserva e visualização pública de acervo.
-Nessa entrega, fiquei por conta de finalizar por total a interface do usuário com todas as regras e peculiaridades, e  no commit `195b8a3 - feat: emprestimo` foi feita toda a logica do empréstimo no backend, o controller, o dto, o cadastro, devolução e renovação do empréstimo assim como testes unitários para diversos casos. 
+
+Nessa entrega, além de concluir todas as telas com seus fluxos específicos, implementei a autenticação completa usando JWT, garantindo que cada requisição ao back-end só fosse permitida mediante token válido. Para persistir o token e manter o usuário logado entre sessões e para manter os dados do usuário salvo entre sessões, utilizei o LocalStorage, e para o uso rápido dos dados de usuário foi construido um store via Zustand, um state-manager leve e reativo. Nos formulários, adotei react-hook-form e yup para validações dinâmicas e de alto desempenho. Toda a interface foi construída sobre Material UI com um esquema de theming personalizado, garantindo consistência visual e permitindo reaproveitar componentes estilizados. Para os ícones vetoriais, recorri a react-icons, o que deixou a aplicação mais leve e de fácil manutenção.
+
+Além disso, criei as validações client-side, exibindo modais de erro, confirmação e sucesso claras e globais através de um componente de alertas integrado ao tema, e fiz testes manuais de todas as regras de permissão (administrador, usuário e visitante) assegurando que cada ação só estivesse disponível ao perfil correto.
+
+Como pode ser visto no commit `195b8a3 - feat: emprestimo`, desenvolvi toda a lógica relacionada ao módulo de empréstimos no back‑end. Isso incluiu:
+
+- Criação de DTOs específicos para as operações de cadastro, renovação e devolução, com validações de integridade e segurança.
+- Implementação completa do controller REST, respeitando boas práticas RESTful e segregando responsabilidades com o uso de services e repositórios.
+- Validação das regras de negócio, como impedimento de empréstimos duplicados, renovação apenas com exemplar em posse do usuário e checagem de pendências.
+- Criação de testes unitários com JUnit e Mockito cobrindo diversos cenários como renovação com prazo expirado, devolução de exemplar não emprestado e tentativas de duplicidade assegurando robustez e previsibilidade das respostas da API.
+
+Essas funcionalidades foram projetadas respeitando princípios de coesão, injeção de dependência, controle transacional e resposta adequada de status HTTP em cada operação. A API final foi documentada no Swagger para facilitar testes e integração com o front‑end.
 
 **Principais vantagens:**
 
