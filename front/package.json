@@ -1,7 +1,9 @@
 {
-    "name": "front",
+    "name": "biblioteca-ufg",
     "version": "0.1.0",
     "private": true,
+    "description": "Sistema de Gestão de Bibliotecas",
+    "author": "Grupo 6 - UFG",
     "main": "main.js",
     "scripts": {
         "dev": "next dev --turbopack",

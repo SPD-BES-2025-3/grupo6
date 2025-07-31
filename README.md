@@ -41,12 +41,11 @@ A arquitetura é composta por três frentes:
 
 ## 🏁 Como Rodar a Aplicação
 
-### 1. Banco de Dados e Build com Docker
+### 1. Rodando com Docker
 
 
 ```bash
-docker-compose build
-docker-compose up -d
+docker-compose up --build -d
 ```
 
 > O `docker-compose.yml` já define os serviços:
@@ -61,6 +60,7 @@ docker-compose up -d
 
 * Documentação Swagger: `http://localhost:8080/api/swagger-ui.html`
 * Documentação Swagger Api Pública: `http://localhost:8080/public/swagger-ui.html`
+* Acesso ao Front‑end Web: `http://localhost:4200`
 
 ### 4. Executar o Front‑end Desktop
 
@@ -71,15 +71,8 @@ docker-compose up -d
    npm i --legacy-peer-deps
    ```
 
-2. Rodar em modo de desenvolvimento:
+2. Rodar projeto desktop (Electron):
 
-   ```bash
-   npm run dev
-   ```
-   * A aplicação web Next.js estará em `http://localhost:3000`.
-
-3. Build para produção:
-   O Docker já builda o front então só é necessário rodar o electron
    ```bash
    npm run electron
    ```
